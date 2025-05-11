@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Главная страница";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home-index.css" />
+}
+
+<div class="hero-section">
+    <h1 class="hero-title">Образовательный портал по русскому языку</h1>
+    @* <p class="hero-subtitle">Эффективная подготовка к ЕГЭ по русскому языку с помощью современных образовательных технологий</p> *@
+</div>
+
+<h2 class="home-section-title">Выберите свою роль</h2>
+
+<div class="role-cards-container">
+    <div class="role-card student animated delay-1">
+        <div class="role-card-header">
+            <h5 class="role-card-title"><i class="fas fa-user-graduate role-icon"></i>Ученик</h5>
+        </div>
+        <div class="role-card-body">
+            <p class="role-card-text">Доступ к материалам, тестам и заданиям. Отслеживание прогресса подготовки к ЕГЭ.</p>
+        </div>
+        <div class="role-card-footer">
+            <a href="@Url.Action("Login", "Account")" class="role-card-btn">Вход для ученика</a>
+        </div>
+    </div>
+
+    <div class="role-card teacher animated delay-2">
+        <div class="role-card-header">
+            <h5 class="role-card-title"><i class="fas fa-chalkboard-teacher role-icon"></i>Учитель</h5>
+        </div>
+        <div class="role-card-body">
+            <p class="role-card-text">Управление классами, создание заданий и проверка работ учеников.</p>
+        </div>
+        <div class="role-card-footer">
+            <a href="@Url.Action("Login", "Account")" class="role-card-btn">Вход для учителя</a>
+        </div>
+    </div>
+
+    <div class="role-card admin animated delay-3">
+        <div class="role-card-header">
+            <h5 class="role-card-title"><i class="fas fa-user-shield role-icon"></i>Администратор</h5>
+        </div>
+        <div class="role-card-body">
+            <p class="role-card-text">Управление пользователями, классами и мониторинг работы портала.</p>
+        </div>
+        <div class="role-card-footer">
+            <a href="@Url.Action("Login", "Account")" class="role-card-btn">Вход для администратора</a>
+        </div>
+    </div>
+</div>

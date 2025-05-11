@@ -1,0 +1,60 @@
+﻿@model OnlineTutor.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Ошибка";
+}
+
+<div class="text-center">
+    <h1 class="text-danger">Ошибка</h1>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <h2 class="text-danger">@Model.ErrorMessage</h2>
+    }
+    else
+    {
+        <h2 class="text-danger">Произошла ошибка при обработке вашего запроса.</h2>
+    }
+
+    @if (Model.StatusCode.HasValue)
+    {
+        <h3 class="text-danger">Код ошибки: @Model.StatusCode</h3>
+    }
+
+    @if (Model.ShowRequestId)
+    {
+        <p>
+            <strong>Идентификатор запроса:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorDetails) && (bool)(Context.Items["IsDevelopment"] ?? false))
+    {
+        <div class="alert alert-warning mt-4">
+            <h4>Детали ошибки (только для разработки)</h4>
+            <p>@Model.ErrorDetails</p>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Вернуться на главную</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5>Что можно сделать?</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>Проверьте правильность введенного URL</li>
+                    <li>Убедитесь, что у вас есть необходимые права доступа</li>
+                    <li>Попробуйте обновить страницу</li>
+                    <li>Вернитесь на <a asp-controller="Home" asp-action="Index">главную страницу</a></li>
+                    <li>Если проблема повторяется, свяжитесь с администратором</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

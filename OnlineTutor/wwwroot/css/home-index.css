@@ -1,0 +1,222 @@
+﻿:root {
+    --primary-color: #3a6ea5;
+    --primary-light: #5589bd;
+    --secondary-color: #6a75a8;
+    --accent-color: #b06a8a;
+    --background-color: #f8f9fa;
+    --text-primary: #2c3e50;
+    --text-secondary: #596877;
+    --border-color: #e1e8ef;
+    --surface-color: #ffffff;
+}
+
+/* Контейнер для трех плиток */
+.role-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 2rem 0;
+    gap: 20px;
+}
+
+/* Стиль для каждой плитки */
+.role-card {
+    flex: 1;
+    min-width: 300px;
+    background-color: var(--surface-color);
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+    .role-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(58, 110, 165, 0.12);
+    }
+
+/* Заголовок плитки */
+.role-card-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Разные цвета для разных ролей - более сдержанные */
+.role-card.student .role-card-header {
+    background-color: #3a6ea5;
+    color: white;
+}
+
+.role-card.teacher .role-card-header {
+    background-color: #6a75a8;
+    color: white;
+}
+
+.role-card.admin .role-card-header {
+    background-color: #b06a8a;
+    color: white;
+}
+
+/* Содержимое плитки */
+.role-card-body {
+    padding: 1.25rem;
+    min-height: 120px; /* Фиксированная минимальная высота */
+}
+
+.role-card-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: white;
+}
+
+.role-card-text {
+    margin-bottom: 0; /* Убираем нижний отступ */
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Кнопка плитки - исправлена проблема с выходом за границы */
+.role-card-footer {
+    padding: 0 1.25rem 1.25rem; /* Уменьшаем верхний отступ */
+    text-align: center;
+}
+
+.role-card-btn {
+    display: inline-block;
+    padding: 0.6rem 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box; /* Учитываем padding в ширине */
+    max-width: 100%; /* Ограничиваем ширину родителем */
+}
+
+/* Более сдержанные цвета кнопок */
+.role-card.student .role-card-btn {
+    background-color: #3a6ea5;
+    color: white;
+    box-shadow: 0 2px 6px rgba(58, 110, 165, 0.2);
+}
+
+    .role-card.student .role-card-btn:hover {
+        background-color: #335f8f;
+        box-shadow: 0 3px 8px rgba(58, 110, 165, 0.25);
+    }
+
+.role-card.teacher .role-card-btn {
+    background-color: #6a75a8;
+    color: white;
+    box-shadow: 0 2px 6px rgba(106, 117, 168, 0.2);
+}
+
+    .role-card.teacher .role-card-btn:hover {
+        background-color: #5c6694;
+        box-shadow: 0 3px 8px rgba(106, 117, 168, 0.25);
+    }
+
+.role-card.admin .role-card-btn {
+    background-color: #b06a8a;
+    color: white;
+    box-shadow: 0 2px 6px rgba(176, 106, 138, 0.2);
+}
+
+    .role-card.admin .role-card-btn:hover {
+        background-color: #9a5c79;
+        box-shadow: 0 3px 8px rgba(176, 106, 138, 0.25);
+    }
+
+/* Иконки ролей */
+.role-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Заголовок секции - более сдержанный */
+.home-section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.home-section-subtitle {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Верхняя секция с приветствием - более сдержанная */
+.hero-section {
+    text-align: center;
+    padding: 2.5rem 0;
+    background-color: #f1f5f9;
+    border-radius: 10px;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* О нашем портале секция */
+.about-section {
+    background-color: #f1f5f9;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-top: 3rem;
+    border: 1px solid var(--border-color);
+}
+
+    .about-section h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .about-section p {
+        color: var(--text-secondary);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 992px) {
+    .role-cards-container {
+        flex-direction: column;
+    }
+
+    .role-card {
+        margin-bottom: 1.5rem;
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+}

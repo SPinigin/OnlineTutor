@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Образовательный портал</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/OnlineTutor.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+
+                <div class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link nav-button" asp-controller="Home" asp-action="Index">Главная</a>
+                    </li>
+                </div>
+
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="navbar-brand mx-auto d-flex justify-content-center">
+                    <img src="~/images/education-logo.svg" alt="Образовательный портал" height="50">
+                </div>
+
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link nav-button" asp-controller="Admin" asp-action="Index">Администрирование</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Teacher"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link nav-button" asp-controller="Teacher" asp-action="Index">Кабинет учителя</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Student"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link nav-button" asp-controller="Student" asp-action="Index">Кабинет ученика</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link nav-button border-0">Выйти</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link nav-button" asp-controller="Account" asp-action="Register">Регистрация</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-heading">Образовательный портал</h5>
+                    <p class="footer-text">Эффективная подготовка к ЕГЭ по русскому языку с использованием современных образовательных технологий.</p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-heading">Контакты</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:pn31@mail.ru">pn31@mail.ru</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+78001234567">8 (800) 123-45-67</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> г. Нефтеюганск</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-heading">Разработчик</h5>
+                    <p class="footer-text">
+                        <strong>Пинигин Сергей Николаевич</strong><br>
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="copyright">&copy; @DateTime.Now.Year - Образовательный портал по русскому языку</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="footer-links-bottom">
+                        <a href="#">Политика конфиденциальности</a> |
+                        <a href="#">Условия использования</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
