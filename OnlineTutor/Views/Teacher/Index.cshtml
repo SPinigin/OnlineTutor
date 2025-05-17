@@ -12,18 +12,29 @@
             </div>
             <div class="card-body">
                 <p class="card-text">Управление классами и учениками.</p>
-                <a href="#" class="btn btn-primary">Управление классами</a>
+                <a asp-controller="Class" asp-action="Index" class="btn btn-primary">Управление классами</a>
             </div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="card-title">Задания</h5>
+                <h5 class="card-title">Управление учениками</h5>
             </div>
             <div class="card-body">
-                <p class="card-text">Создание и управление заданиями для учеников.</p>
-                <a href="#" class="btn btn-primary">Управление заданиями</a>
+                <p class="card-text">Добавление, редактирование и управление учениками.</p>
+                <a asp-controller="StudentManagement" asp-action="Index" class="btn btn-primary">Управление учениками</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Тесты</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Создание и управление тестами для учеников.</p>
+                <a asp-controller="Test" asp-action="Index" class="btn btn-primary">Управление тестами</a>
             </div>
         </div>
     </div>

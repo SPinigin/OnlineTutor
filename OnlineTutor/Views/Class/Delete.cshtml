@@ -1,0 +1,43 @@
+﻿@model OnlineTutor.Models.Class
+
+@{
+    ViewData["Title"] = "Удаление класса";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4>Удаление класса</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Вы действительно хотите удалить этот класс?</h5>
+
+                    <div class="alert alert-warning mt-3">
+                        <p><strong>Внимание!</strong> Удаление класса не удалит учеников, но они перестанут быть привязаны к этому классу.</p>
+                    </div>
+
+                    <dl class="row mt-4">
+                        <dt class="col-sm-3">Название:</dt>
+                        <dd class="col-sm-9">@Model.Name</dd>
+
+                        <dt class="col-sm-3">Учебный год:</dt>
+                        <dd class="col-sm-9">@Model.Year</dd>
+
+                        <dt class="col-sm-3">Количество учеников:</dt>
+                        <dd class="col-sm-9">@(Model.Students?.Count ?? 0)</dd>
+                    </dl>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-secondary me-md-2">Отмена</a>
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+﻿@model List<OnlineTutor.Models.Test>
+
+@{
+    ViewData["Title"] = "Управление тестами";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Управление тестами</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Создать новый тест
+        </a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">
+            <p>У вас пока нет созданных тестов. Нажмите кнопку "Создать новый тест", чтобы начать.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Название</th>
+                        <th>Предмет</th>
+                        <th>Тема</th>
+                        <th>Дата создания</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var test in Model)
+                    {
+                        <tr>
+                            <td>@test.Title</td>
+                            <td>@test.Subject</td>
+                            <td>@(test.Topic ?? "-")</td>
+                            <td>@test.CreatedDate.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                @if (test.IsPublished)
+                                {
+                                    <span class="badge bg-success">Опубликован</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Черновик</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@test.Id" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i> Редактировать
+                                    </a>
+                                    <a asp-action="Questions" asp-route-id="@test.Id" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-list"></i> Вопросы
+                                    </a>
+                                    <a asp-action="Assign" asp-route-id="@test.Id" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-user-plus"></i> Назначить
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@test.Id" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i> Удалить
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

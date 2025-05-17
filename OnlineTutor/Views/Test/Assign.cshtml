@@ -1,0 +1,86 @@
+﻿@model OnlineTutor.Models.ViewModels.TestAssignmentViewModel
+
+@{
+    ViewData["Title"] = "Назначение теста";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Назначение теста</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="mb-3">Тест: @Model.TestTitle</h5>
+
+                    <form asp-action="Assign" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="TestId" />
+                        <input type="hidden" asp-for="TestTitle" />
+
+                        <div class="mb-3">
+                            <label asp-for="ClassId" class="form-label">Назначить классу</label>
+                            <select asp-for="ClassId" class="form-select" id="classSelect">
+                                <option value="">-- Выберите класс --</option>
+                                @foreach (var cls in Model.AvailableClasses)
+                                {
+                                    <option value="@cls.Id">@cls.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">или</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="StudentId" class="form-label">Назначить ученику</label>
+                            <select asp-for="StudentId" class="form-select" id="studentSelect">
+                                <option value="">-- Выберите ученика --</option>
+                                @foreach (var student in Model.AvailableStudents)
+                                {
+                                    <option value="@student.Id">@student.LastName @student.FirstName @student.MiddleName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DueDate" class="form-label">Срок выполнения</label>
+                            <input asp-for="DueDate" class="form-control" type="date" />
+                            <span asp-validation-for="DueDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn btn-secondary me-md-2">Отмена</a>
+                            <button type="submit" class="btn btn-primary">Назначить тест</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // При выборе класса сбрасываем выбор ученика и наоборот
+            $('#classSelect').change(function () {
+                if ($(this).val()) {
+                    $('#studentSelect').val('');
+                }
+            });
+
+            $('#studentSelect').change(function () {
+                if ($(this).val()) {
+                    $('#classSelect').val('');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,17 @@
+﻿@model OnlineTutor.Models.ViewModels.QuestionOptionViewModel
+
+<div class="option-row mb-2">
+    <div class="input-group">
+        <input type="hidden" name="Options[@ViewBag.Index].Id" value="@Model.Id" />
+        <input type="text" name="Options[@ViewBag.Index].Text" class="form-control" placeholder="Вариант ответа" value="@Model.Text" />
+        <div class="input-group-text">
+            <div class="form-check">
+                <input type="checkbox" name="Options[@ViewBag.Index].IsCorrect" class="form-check-input" id="option@ViewBag.Index" @(Model.IsCorrect ? "checked" : "") />
+                <label class="form-check-label" for="option@ViewBag.Index">Правильный</label>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-danger remove-option">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>

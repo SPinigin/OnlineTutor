@@ -1,0 +1,123 @@
+﻿@model List<OnlineTutor.Models.Question>
+
+@{
+    ViewData["Title"] = "Управление вопросами";
+    var testId = ViewBag.TestId;
+    var testTitle = ViewBag.TestTitle;
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Вопросы теста</h2>
+            <h5 class="text-muted">@testTitle</h5>
+        </div>
+        <a asp-action="AddQuestion" asp-route-testId="@testId" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Добавить вопрос
+        </a>
+    </div>
+
+    <div class="mb-3">
+        <a asp-action="Edit" asp-route-id="@testId" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Вернуться к редактированию теста
+        </a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">
+            <p>В этом тесте пока нет вопросов. Нажмите кнопку "Добавить вопрос", чтобы начать.</p>
+        </div>
+    }
+    else
+    {
+        <div class="list-group question-list">
+            @foreach (var question in Model.OrderBy(q => q.OrderIndex))
+            {
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">
+                            <span class="badge bg-secondary me-2">@question.OrderIndex</span>
+                            @question.Text
+                        </h5>
+                        <div>
+                            <a asp-action="EditQuestion" asp-route-id="@question.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> Редактировать
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteQuestionModal"
+                                    data-question-id="@question.Id"
+                                    data-question-text="@question.Text">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                        </div>
+                    </div>
+                    <p class="mb-1">
+                        <span class="badge bg-info">@question.Type.ToString()</span>
+                        <small class="text-muted ms-2">@question.Points балл(ов)</small>
+                    </p>
+
+                    @if (question.Type == OnlineTutor.Models.QuestionType.SingleChoice ||
+                   question.Type == OnlineTutor.Models.QuestionType.MultipleChoice)
+                    {
+                        <div class="mt-2">
+                            <p class="mb-1"><strong>Варианты ответов:</strong></p>
+                            <ul class="list-group">
+                                @foreach (var option in question.Options)
+                                {
+                                    <li class="list-group-item @(option.IsCorrect ? "list-group-item-success" : "")">
+                                        @option.Text
+                                        @if (option.IsCorrect)
+                                        {
+                                            <span class="badge bg-success float-end">Правильный</span>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+
+        <div class="modal fade" id="deleteQuestionModal" tabindex="-1" aria-labelledby="deleteQuestionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteQuestionModalLabel">Подтверждение удаления</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Вы уверены, что хотите удалить вопрос: <span id="questionText"></span>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <form id="deleteQuestionForm" asp-action="DeleteQuestion" method="post">
+                            <input type="hidden" id="questionId" name="id" />
+                            <input type="hidden" name="testId" value="@testId" />
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Скрипт для модального окна подтверждения удаления
+        var deleteQuestionModal = document.getElementById('deleteQuestionModal');
+        if (deleteQuestionModal) {
+            deleteQuestionModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var questionId = button.getAttribute('data-question-id');
+                var questionText = button.getAttribute('data-question-text');
+
+                document.getElementById('questionText').textContent = questionText;
+                document.getElementById('questionId').value = questionId;
+            });
+        }
+    </script>
+}

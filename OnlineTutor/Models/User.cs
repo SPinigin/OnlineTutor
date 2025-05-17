@@ -1,32 +1,69 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineTutor.Models
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<int>
     {
+        [Required(ErrorMessage = "Имя обязательно для заполнения")]
+        [Display(Name = "Имя")]
+        [StringLength(50, ErrorMessage = "Имя не может быть длиннее 50 символов")]
         public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Фамилия обязательна для заполнения")]
+        [Display(Name = "Фамилия")]
+        [StringLength(50, ErrorMessage = "Фамилия не может быть длиннее 50 символов")]
         public string LastName { get; set; }
+
+        [Display(Name = "Отчество")]
+        [StringLength(50, ErrorMessage = "Отчество не может быть длиннее 50 символов")]
         public string? MiddleName { get; set; }
+
+        [Required]
+        [Display(Name = "Роль")]
         public UserRole Role { get; set; }
 
-        // Поля для ученика
-        public string Grade { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        [Display(Name = "Полное имя")]
+        public string FullName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(MiddleName))
+                    return $"{LastName} {FirstName} {MiddleName}";
+                else
+                    return $"{LastName} {FirstName}";
+            }
+        }
 
-        // Поля для учителя
-        public string Subject { get; set; }
-        public int? TeachingExperience { get; set; }
-        public string Education { get; set; }
+        [Display(Name = "Сокращенное имя")]
+        public string ShortName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(MiddleName))
+                    return $"{LastName} {FirstName[0]}. {MiddleName[0]}.";
+                else
+                    return $"{LastName} {FirstName[0]}.";
+            }
+        }
 
-        // Существующие поля
-        public int? ClassId { get; set; }
-        public virtual Class Class { get; set; }
+        [Display(Name = "Подтвержденный аккаунт")]
+        public bool IsVerified { get; set; } = false;
+
+        public virtual StudentProfile? StudentProfile { get; set; }
+        public virtual TeacherProfile? TeacherProfile { get; set; }
     }
 
     public enum UserRole
     {
+        [Display(Name = "Ученик")]
         Student,
+
+        [Display(Name = "Учитель")]
         Teacher,
+
+        [Display(Name = "Администратор")]
         Administrator
     }
 }

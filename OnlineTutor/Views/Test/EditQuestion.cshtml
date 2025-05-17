@@ -1,0 +1,141 @@
+﻿@model OnlineTutor.Models.ViewModels.QuestionViewModel
+
+@{
+    ViewData["Title"] = "Редактирование вопроса";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Редактирование вопроса</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditQuestion" method="post" id="questionForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="TestId" />
+
+                        <div class="mb-3">
+                            <label asp-for="Text" class="form-label"></label>
+                            <textarea asp-for="Text" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Text" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Type" class="form-label"></label>
+                            <select asp-for="Type" class="form-select" id="questionType">
+                                <option value="@OnlineTutor.Models.QuestionType.SingleChoice">Один из многих</option>
+                                <option value="@OnlineTutor.Models.QuestionType.MultipleChoice">Многие из многих</option>
+                                <option value="@OnlineTutor.Models.QuestionType.ShortAnswer">Короткий ответ</option>
+                                <option value="@OnlineTutor.Models.QuestionType.Essay">Развернутый ответ</option>
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Points" class="form-label"></label>
+                            <input asp-for="Points" class="form-control" type="number" min="1" max="100" />
+                            <span asp-validation-for="Points" class="text-danger"></span>
+                        </div>
+
+                        <div id="optionsContainer" class="mb-3">
+                            <label class="form-label">Варианты ответов</label>
+                            <div id="optionsList">
+                                @for (int i = 0; i < Model.Options.Count; i++)
+                                {
+                                    <div class="option-row mb-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="Options[@i].Id" value="@Model.Options[i].Id" />
+                                            <input type="text" name="Options[@i].Text" class="form-control" placeholder="Вариант ответа" value="@Model.Options[i].Text" />
+                                            <div class="input-group-text">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="Options[@i].IsCorrect" class="form-check-input" id="option@i" @(Model.Options[i].IsCorrect ? "checked" : "") />
+                                                    <label class="form-check-label" for="option@i">Правильный</label>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-danger remove-option">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button type="button" id="addOption" class="btn btn-outline-secondary mt-2">
+                                <i class="fas fa-plus"></i> Добавить вариант
+                            </button>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Questions" asp-route-id="@Model.TestId" class="btn btn-secondary me-md-2">Отмена</a>
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Показывать/скрывать варианты ответов в зависимости от типа вопроса
+            $('#questionType').change(function () {
+                var selectedType = $(this).val();
+                if (selectedType === '@((int)OnlineTutor.Models.QuestionType.SingleChoice)' ||
+                    selectedType === '@((int)OnlineTutor.Models.QuestionType.MultipleChoice)') {
+                    $('#optionsContainer').show();
+                } else {
+                    $('#optionsContainer').hide();
+                }
+            });
+
+            // Инициализация видимости
+            $('#questionType').trigger('change');
+
+            // Добавление нового варианта ответа
+            var optionIndex = @Model.Options.Count;
+
+            $('#addOption').click(function () {
+                var newOption = `
+                    <div class="option-row mb-2">
+                        <div class="input-group">
+                            <input type="hidden" name="Options[${optionIndex}].Id" value="0" />
+                            <input type="text" name="Options[${optionIndex}].Text" class="form-control" placeholder="Вариант ответа" />
+                            <div class="input-group-text">
+                                <div class="form-check">
+                                    <input type="checkbox" name="Options[${optionIndex}].IsCorrect" class="form-check-input" id="option${optionIndex}" />
+                                    <label class="form-check-label" for="option${optionIndex}">Правильный</label>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger remove-option">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                $('#optionsList').append(newOption);
+                optionIndex++;
+            });
+
+            // Удаление варианта ответа
+            $(document).on('click', '.remove-option', function () {
+                $(this).closest('.option-row').remove();
+                // Перенумеруем индексы
+                $('.option-row').each(function (index) {
+                    $(this).find('input[type="text"]').attr('name', `Options[${index}].Text`);
+                    $(this).find('input[type="checkbox"]').attr('name', `Options[${index}].IsCorrect`);
+                    $(this).find('input[type="checkbox"]').attr('id', `option${index}`);
+                    $(this).find('label').attr('for', `option${index}`);
+                });
+                optionIndex = $('.option-row').length;
+            });
+        });
+    </script>
+}

@@ -52,7 +52,7 @@ namespace OnlineTutor.Models.ViewModels
 
         // Дополнительные поля для учеников
         [Display(Name = "Класс")]
-        public string Grade { get; set; }
+        public string? Grade { get; set; }
 
         [Display(Name = "Дата рождения")]
         [DataType(DataType.Date)]

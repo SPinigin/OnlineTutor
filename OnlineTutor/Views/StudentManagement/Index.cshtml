@@ -1,0 +1,98 @@
+﻿@model IEnumerable<OnlineTutor.Models.ViewModels.StudentListViewModel>
+
+@{
+    ViewData["Title"] = "Управление учениками";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Управление учениками</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Добавить ученика
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <p>В системе пока нет учеников. Нажмите кнопку "Добавить ученика", чтобы начать.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Email</th>
+                                <th>Класс</th>
+                                <th>Учебная группа</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr>
+                                    <td>@student.FullName</td>
+                                    <td>@student.Email</td>
+                                    <td>@student.Grade</td>
+                                    <td>@student.ClassName</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-action="Details" asp-route-id="@student.Id" class="btn btn-sm btn-info">
+                                                <i class="fas fa-info-circle"></i> Детали
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@student.Id" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i> Редактировать
+                                            </a>
+                                            @if (!student.IsVerified)
+                                            {
+                                                <a asp-action="VerifyStudent" asp-route-id="@student.Id" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-check-circle"></i> Подтвердить
+                                                </a>
+                                            }
+                                            <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i> Удалить
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Автоматическое закрытие алертов через 5 секунд
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 5000);
+        });
+    </script>
+}

@@ -1,0 +1,98 @@
+﻿@model OnlineTutor.Models.ViewModels.ClassDetailsViewModel
+
+@{
+    ViewData["Title"] = "Детали класса";
+}
+
+<div class="container">
+    <div class="mb-4">
+        <h2>Класс: @Model.Class.Name <small class="text-muted">(@Model.Class.Year г.)</small></h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Назад к списку классов
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Ученики класса</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Class.Students == null || !Model.Class.Students.Any())
+                    {
+                        <div class="alert alert-info">
+                            В этом классе пока нет учеников. Добавьте учеников из списка справа.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ФИО</th>
+                                        <th>Email</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var student in Model.Class.Students.OrderBy(s => s.User.LastName))
+                                    {
+                                        <tr>
+                                            <td>@student.User.FullName</td>
+                                            <td>@student.User.Email</td>
+                                            <td>
+                                                <form asp-action="RemoveStudent" method="post">
+                                                    <input type="hidden" name="classId" value="@Model.Class.Id" />
+                                                    <input type="hidden" name="studentId" value="@student.UserId" />
+                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить ученика из класса?')">
+                                                        <i class="fas fa-user-minus"></i> Удалить
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Добавить учеников</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.AvailableStudents == null || !Model.AvailableStudents.Any())
+                    {
+                        <div class="alert alert-info">
+                            Нет доступных учеников для добавления в класс.
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-action="AddStudent" method="post">
+                            <input type="hidden" name="classId" value="@Model.Class.Id" />
+                            <div class="mb-3">
+                                <label for="studentId" class="form-label">Выберите ученика</label>
+                                <select name="studentId" id="studentId" class="form-select">
+                                    @foreach (var student in Model.AvailableStudents.OrderBy(s => s.LastName))
+                                    {
+                                        <option value="@student.Id">@student.FullName</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Добавить ученика
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

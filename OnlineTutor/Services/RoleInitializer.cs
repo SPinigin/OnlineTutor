@@ -5,7 +5,7 @@ namespace OnlineTutor.Services
 {
     public class RoleInitializer
     {
-        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             string[] roleNames = { "Administrator", "Teacher", "Student" };
 
@@ -13,7 +13,7 @@ namespace OnlineTutor.Services
             {
                 if (!await roleManager.RoleExistsAsync(roleName))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                    await roleManager.CreateAsync(new IdentityRole<int>(roleName));
                 }
             }
 

@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Ожидание подтверждения";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">Ваш аккаунт ожидает подтверждения</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-clock fa-5x text-warning mb-3"></i>
+                        <h5>Ваша учетная запись находится на проверке</h5>
+                        <p class="text-muted">
+                            Администратор или учитель должен подтвердить вашу учетную запись, прежде чем вы сможете
+                            получить полный доступ к системе. Пожалуйста, свяжитесь с вашим учителем, если подтверждение
+                            занимает слишком много времени.
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-outline-secondary">Выйти из системы</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
