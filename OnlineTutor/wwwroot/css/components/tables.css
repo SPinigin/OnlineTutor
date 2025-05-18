@@ -30,3 +30,74 @@
     padding: 0.75rem;
     vertical-align: middle;
 }
+
+/* Улучшение адаптивности таблиц */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 576px) {
+    .table th, .table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Компактные кнопки в таблицах */
+    .table .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    /* Скрываем некоторые колонки на маленьких экранах */
+    .table-adaptive .hide-xs {
+        display: none;
+    }
+}
+
+/* Для мобильных устройств можно сделать таблицы вертикальными */
+.table-vertical-sm {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .table-vertical-sm thead {
+        display: none;
+    }
+
+    .table-vertical-sm,
+    .table-vertical-sm tbody,
+    .table-vertical-sm tr,
+    .table-vertical-sm td {
+        display: block;
+        width: 100%;
+    }
+
+        .table-vertical-sm tr {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+        }
+
+        .table-vertical-sm td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: right;
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+            .table-vertical-sm td:last-child {
+                border-bottom: none;
+            }
+
+            .table-vertical-sm td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                text-align: left;
+                margin-right: 1rem;
+            }
+}

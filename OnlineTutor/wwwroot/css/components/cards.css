@@ -65,3 +65,74 @@
     text-align: center;
     color: white;
 }
+
+/* Улучшение адаптивности карточек */
+.card {
+    height: auto; /* Высота по содержимому */
+    min-height: 100px; /* Минимальная высота */
+}
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Адаптивный размер карточек */
+.card-fixed-height {
+    height: 100%;
+}
+
+    .card-fixed-height .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-fixed-height .card-text {
+        flex-grow: 1;
+    }
+
+/* Для карточек с фиксированной шириной */
+.fixed-width-card {
+    width: 300px;
+    margin: 0 auto 20px;
+}
+
+@media (max-width: 350px) {
+    .fixed-width-card {
+        width: 100%;
+    }
+}
+
+/* Для карточек ролей на главной странице */
+.role-card {
+    min-height: 250px;
+}
+
+.role-card-body {
+    height: 120px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .role-card {
+        min-height: 200px;
+    }
+
+    .role-card-body {
+        height: auto;
+        min-height: 80px;
+    }
+}
+
+/* Адаптивные отступы для карточек */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-header {
+        padding: 0.75rem 1rem;
+    }
+}

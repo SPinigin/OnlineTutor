@@ -17,13 +17,17 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title">Управление классами</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Создание и управление классами и назначение учителей.</p>
-                <a href="#" class="btn btn-primary">Управление классами</a>
+        <div class="col-md-4 mb-4">
+            <div class="card card-fixed-height">
+                <div class="card-header">
+                    <h5 class="card-title">Мои классы</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Управление классами и учениками.</p>
+                    <a asp-controller="Class" asp-action="Index" class="btn btn-primary mt-auto">
+                        <i class="fas fa-users"></i> Классы
+                    </a>
+                </div>
             </div>
         </div>
     </div>

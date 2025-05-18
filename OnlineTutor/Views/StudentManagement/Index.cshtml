@@ -93,12 +93,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Автоматическое закрытие алертов через 5 секунд
-        $(document).ready(function () {
-            setTimeout(function () {
-                $('.alert').alert('close');
-            }, 5000);
-        });
-    </script>
+    <script src="~/js/components/alerts.js" asp-append-version="true"></script>
 }

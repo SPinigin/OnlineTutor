@@ -239,3 +239,61 @@
         max-width: 33.333333%;
     }
 }
+
+/* Дополнительные утилиты для адаптивности */
+
+/* Скрытие элементов на разных размерах экрана */
+@media (max-width: 575.98px) {
+    .d-none-xs {
+        display: none !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .d-none-sm {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .d-none-md {
+        display: none !important;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .d-none-lg {
+        display: none !important;
+    }
+}
+
+/* Адаптивные отступы */
+@media (max-width: 576px) {
+    .container {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .row {
+        margin-right: -10px;
+        margin-left: -10px;
+    }
+
+    .col, [class*="col-"] {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    /* Уменьшаем заголовки на маленьких экранах */
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+}

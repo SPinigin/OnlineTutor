@@ -79,3 +79,50 @@ a {
         font-size: 1.5rem;
     }
 }
+
+/* Адаптивная типографика */
+html {
+    font-size: 16px;
+}
+
+@media (max-width: 992px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Предотвращение переноса текста в заголовках */
+.no-wrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Класс для длинных слов, чтобы они не ломали макет */
+.break-word {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

@@ -58,3 +58,39 @@
         text-align: center;
     }
 }
+
+/* Улучшение адаптации навигационных кнопок */
+.nav-button {
+    white-space: nowrap; /* Предотвращает перенос текста */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Добавляет многоточие при переполнении */
+    max-width: 100%;
+}
+
+/* Стили для мобильных устройств */
+@media (max-width: 991px) {
+    .navbar-nav {
+        flex-wrap: wrap;
+    }
+
+    .nav-item {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    .nav-button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 0.5rem 1rem !important;
+    }
+}
+
+/* Для очень маленьких экранов можно сделать кнопки компактнее */
+@media (max-width: 576px) {
+    .nav-button {
+        padding: 0.4rem 0.75rem !important;
+        font-size: 0.9rem;
+    }
+}
+
