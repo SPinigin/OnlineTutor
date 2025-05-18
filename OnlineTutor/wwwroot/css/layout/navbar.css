@@ -69,8 +69,6 @@
 
 /* Стили для мобильного меню */
 @media (max-width: 991px) {
-    /* ... существующие стили ... */
-
     .navbar-nav .form-inline {
         width: 100%;
     }
@@ -116,4 +114,55 @@
             box-shadow: 0 0 0 0.1rem var(--primary-color);
             outline: none;
         }
+}
+
+.navbar-text {
+    font-size: 2rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+@media (max-width: 991px) {
+    .page-title-container {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: auto;
+        max-width: 70%; /* Ограничение ширины для длинных заголовков */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .navbar {
+        position: relative;
+        min-height: 70px;
+    }
+
+    .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        z-index: 1000;
+    }
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+body {
+    padding-top: 70px; /* Высота navbar */
+}
+
+@media (max-width: 991px) {
+    body {
+        padding-top: 90px; /* Немного больше высоты для мобильных */
+    }
 }
