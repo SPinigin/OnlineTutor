@@ -1,0 +1,32 @@
+﻿/* Стили для таблиц */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    vertical-align: top;
+    border-color: var(--border-color);
+}
+
+    .table > :not(caption) > * > * {
+        padding: 0.75rem;
+        border-bottom-width: 1px;
+        border-bottom-color: inherit;
+    }
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-hover > tbody > tr:hover > * {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table td, .table th {
+    padding: 0.75rem;
+    vertical-align: middle;
+}

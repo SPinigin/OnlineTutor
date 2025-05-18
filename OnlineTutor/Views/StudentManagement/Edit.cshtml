@@ -17,17 +17,18 @@
                         <input type="hidden" asp-for="Id" />
 
                         <h5 class="mb-3">Основная информация</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="LastName" class="form-label"></label>
-                                <input asp-for="LastName" class="form-control" />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="FirstName" class="form-label"></label>
-                                <input asp-for="FirstName" class="form-control" />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-                            </div>
+                        
+                        
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
@@ -45,10 +46,14 @@
                         <div class="mb-3">
                             <label asp-for="NewPassword" class="form-label"></label>
                             <div class="input-group">
-                                <input asp-for="NewPassword" class="form-control" id="newPassword" />
+                                <input asp-for="NewPassword" class="form-control" id="newPassword" type="password" />
                                 <button type="button" class="btn btn-outline-secondary" id="generatePassword">
                                     <i class="fas fa-sync-alt"></i> Сгенерировать
                                 </button>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input type="checkbox" class="form-check-input" id="showPassword">
+                                <label class="form-check-label" for="showPassword">Показать пароль</label>
                             </div>
                             <span asp-validation-for="NewPassword" class="text-danger"></span>
                             <small class="form-text text-muted">Оставьте поле пустым, если не хотите менять пароль.</small>
@@ -92,9 +97,7 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
         $(document).ready(function () {
@@ -103,38 +106,52 @@
                 if (!length) {
                     length = 8;
                 }
-
+                
                 var lowerChars = "abcdefghijklmnopqrstuvwxyz";
                 var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 var numbers = "0123456789";
                 var specialChars = "!$%^&*";
-
+                
                 var allChars = lowerChars + upperChars + numbers + specialChars;
                 var password = "";
-
+                
                 // Гарантируем наличие заглавной буквы, строчной буквы, цифры и специального символа
                 password += upperChars.charAt(Math.floor(Math.random() * upperChars.length));
                 password += lowerChars.charAt(Math.floor(Math.random() * lowerChars.length));
                 password += numbers.charAt(Math.floor(Math.random() * numbers.length));
                 password += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
-
+                
                 // Дополняем до нужной длины
                 for (var i = 4; i < length; i++) {
                     password += allChars.charAt(Math.floor(Math.random() * allChars.length));
                 }
-
+                
                 // Перемешиваем символы
                 password = password.split('').sort(function() {
                     return 0.5 - Math.random();
                 }).join('');
-
+                
                 return password;
             }
 
             // Обработчик кнопки генерации пароля
             $("#generatePassword").click(function() {
                 var password = generatePassword(8);
-                $("#password").val(password);
+                $("#newPassword").val(password);
+                
+                // Если пароль сгенерирован, показываем его
+                if ($("#showPassword").is(":checked")) {
+                    $("#newPassword").attr("type", "text");
+                }
+            });
+            
+            // Обработчик чекбокса "Показать пароль"
+            $("#showPassword").change(function() {
+                if(this.checked) {
+                    $("#newPassword").attr("type", "text");
+                } else {
+                    $("#newPassword").attr("type", "password");
+                }
             });
         });
     </script>

@@ -20,28 +20,28 @@
     }
     else
     {
-        <div class="row">
+        <div class="d-flex flex-wrap justify-content-start">
             @foreach (var classItem in Model)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">@classItem.Name</h5>
+                <div class="fixed-width-card">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary">
+                            <h5 class="class-card-title">@(string.IsNullOrEmpty(classItem.Name) ? "Без названия" : classItem.Name)</h5>
                         </div>
                         <div class="card-body">
                             <p class="card-text"><strong>Учебный год:</strong> @classItem.Year</p>
                             <p class="card-text"><strong>Количество учеников:</strong> @(classItem.Students?.Count ?? 0)</p>
                         </div>
                         <div class="card-footer">
-                            <div class="btn-group w-100">
-                                <a asp-action="Details" asp-route-id="@classItem.Id" class="btn btn-info">
-                                    <i class="fas fa-users"></i> Ученики
+                            <div class="btn-group d-flex">
+                                <a asp-action="Details" asp-route-id="@classItem.Id" class="btn btn-sm btn-info flex-fill btn-no-hover-effect">
+                                    <i class="fas fa-users"></i>
                                 </a>
-                                <a asp-action="Edit" asp-route-id="@classItem.Id" class="btn btn-primary">
-                                    <i class="fas fa-edit"></i> Редактировать
+                                <a asp-action="Edit" asp-route-id="@classItem.Id" class="btn btn-sm btn-primary flex-fill btn-no-hover-effect">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                                <a asp-action="Delete" asp-route-id="@classItem.Id" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i> Удалить
+                                <a asp-action="Delete" asp-route-id="@classItem.Id" class="btn btn-sm btn-danger flex-fill btn-no-hover-effect">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </div>
                         </div>

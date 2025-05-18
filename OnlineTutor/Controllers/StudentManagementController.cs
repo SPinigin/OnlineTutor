@@ -49,7 +49,8 @@ namespace OnlineTutor.Controllers
                     FullName = student.FullName,
                     Email = student.Email,
                     Grade = profile?.Grade ?? "-",
-                    ClassName = profile?.Class?.Name ?? "-"
+                    ClassName = profile?.Class?.Name ?? "-",
+                    IsVerified = student.IsVerified // Добавляем это свойство
                 };
 
                 studentList.Add(viewModel);

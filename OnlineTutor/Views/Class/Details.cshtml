@@ -13,7 +13,8 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+
+        <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header">
                     <h4>Ученики класса</h4>
@@ -46,7 +47,7 @@
                                                 <form asp-action="RemoveStudent" method="post">
                                                     <input type="hidden" name="classId" value="@Model.Class.Id" />
                                                     <input type="hidden" name="studentId" value="@student.UserId" />
-                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить ученика из класса?')">
+                                                    <button type="submit" class="btn btn-sm btn-danger btn-no-hover-effect" onclick="return confirm('Вы уверены, что хотите удалить ученика из класса?')">
                                                         <i class="fas fa-user-minus"></i> Удалить
                                                     </button>
                                                 </form>
@@ -61,7 +62,8 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     <h4>Добавить учеников</h4>
@@ -86,7 +88,7 @@
                                     }
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary btn-no-hover-effect">
                                 <i class="fas fa-user-plus"></i> Добавить ученика
                             </button>
                         </form>

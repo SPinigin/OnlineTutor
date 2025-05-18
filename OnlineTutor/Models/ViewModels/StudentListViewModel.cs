@@ -7,5 +7,6 @@
         public string Email { get; set; }
         public string Grade { get; set; }
         public string ClassName { get; set; }
+        public bool IsVerified { get; set; }
     }
 }

@@ -1,14 +1,4 @@
-﻿:root {
-    --primary-color: #3a6ea5;
-    --primary-light: #5589bd;
-    --secondary-color: #6a75a8;
-    --accent-color: #b06a8a;
-    --background-color: #f8f9fa;
-    --text-primary: #2c3e50;
-    --text-secondary: #596877;
-    --border-color: #e1e8ef;
-    --surface-color: #ffffff;
-}
+﻿/* Стили для главной страницы */
 
 /* Контейнер для трех плиток */
 .role-cards-container {
@@ -63,7 +53,7 @@
 /* Содержимое плитки */
 .role-card-body {
     padding: 1.25rem;
-    min-height: 120px; /* Фиксированная минимальная высота */
+    min-height: 120px;
 }
 
 .role-card-title {
@@ -74,14 +64,14 @@
 }
 
 .role-card-text {
-    margin-bottom: 0; /* Убираем нижний отступ */
+    margin-bottom: 0;
     color: var(--text-secondary);
     line-height: 1.5;
 }
 
-/* Кнопка плитки - исправлена проблема с выходом за границы */
+/* Кнопка плитки */
 .role-card-footer {
-    padding: 0 1.25rem 1.25rem; /* Уменьшаем верхний отступ */
+    padding: 0 1.25rem 1.25rem;
     text-align: center;
 }
 
@@ -94,11 +84,11 @@
     transition: all 0.3s ease;
     width: 100%;
     text-align: center;
-    box-sizing: border-box; /* Учитываем padding в ширине */
-    max-width: 100%; /* Ограничиваем ширину родителем */
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
-/* Более сдержанные цвета кнопок */
+/* Цвета кнопок */
 .role-card.student .role-card-btn {
     background-color: #3a6ea5;
     color: white;
@@ -139,7 +129,7 @@
     vertical-align: middle;
 }
 
-/* Заголовок секции - более сдержанный */
+/* Заголовок секции */
 .home-section-title {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -158,7 +148,7 @@
     margin-right: auto;
 }
 
-/* Верхняя секция с приветствием - более сдержанная */
+/* Верхняя секция с приветствием */
 .hero-section {
     text-align: center;
     padding: 2.5rem 0;
@@ -205,7 +195,41 @@
         margin: 0 auto;
     }
 
-/* Адаптивность для мобильных устройств */
+/* Анимации для карточек */
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+.delay-1 {
+    animation-delay: 0.2s;
+}
+
+.delay-2 {
+    animation-delay: 0.4s;
+}
+
+.delay-3 {
+    animation-delay: 0.6s;
+}
+
+/* Адаптивность */
 @media (max-width: 992px) {
     .role-cards-container {
         flex-direction: column;

@@ -1,0 +1,33 @@
+﻿/* Стили для страниц ученика */
+
+/* Кабинет ученика */
+.student-dashboard .card {
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .student-dashboard .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
+
+/* Страница результатов тестов */
+.test-result {
+    padding: 1rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.test-score {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+    .test-score.passing {
+        color: #28a745;
+    }
+
+    .test-score.failing {
+        color: #dc3545;
+    }

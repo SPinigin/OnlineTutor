@@ -15,7 +15,6 @@
                     <form asp-controller="Account" asp-action="Register" method="post" id="registrationForm">
                         <div asp-validation-summary="All" class="text-danger"></div>
 
-
                         <div class="form-group mb-4">
                             <label asp-for="Role" class="form-label"></label>
                             <select asp-for="Role" class="form-select" id="roleSelect">
@@ -26,22 +25,17 @@
                             <span asp-validation-for="Role" class="text-danger"></span>
                         </div>
 
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="LastName" class="form-label"></label>
-                                    <input asp-for="LastName" class="form-control" />
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="FirstName" class="form-label"></label>
-                                    <input asp-for="FirstName" class="form-control" />
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                </div>
-                            </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
@@ -56,6 +50,26 @@
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <div class="input-group">
+                                <input asp-for="Password" class="form-control" type="password" id="password" />
+                                <button type="button" class="btn btn-outline-secondary" id="generatePassword">
+                                    <i class="fas fa-sync-alt"></i> Сгенерировать
+                                </button>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input type="checkbox" class="form-check-input" id="showPassword">
+                                <label class="form-check-label" for="showPassword">Показать пароль</label>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" type="password" id="confirmPassword" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
 
                         <div id="studentFields" style="display: none;">
                             <div class="form-group mb-3">
@@ -88,18 +102,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label asp-for="ConfirmPassword" class="form-label"></label>
-                            <input asp-for="ConfirmPassword" class="form-control" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
-
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                         </div>
@@ -125,6 +127,63 @@
                 } else {
                     $('#studentFields').hide();
                     $('#teacherFields').hide();
+                }
+            });
+            
+            // Функция для генерации случайного пароля
+            function generatePassword(length) {
+                if (!length) {
+                    length = 8;
+                }
+                
+                var lowerChars = "abcdefghijklmnopqrstuvwxyz";
+                var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                var numbers = "0123456789";
+                var specialChars = "!$%^&*";
+                
+                var allChars = lowerChars + upperChars + numbers + specialChars;
+                var password = "";
+                
+                // Гарантируем наличие заглавной буквы, строчной буквы, цифры и специального символа
+                password += upperChars.charAt(Math.floor(Math.random() * upperChars.length));
+                password += lowerChars.charAt(Math.floor(Math.random() * lowerChars.length));
+                password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+                password += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
+                
+                // Дополняем до нужной длины
+                for (var i = 4; i < length; i++) {
+                    password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+                }
+                
+                // Перемешиваем символы
+                password = password.split('').sort(function() {
+                    return 0.5 - Math.random();
+                }).join('');
+                
+                return password;
+            }
+
+            // Добавляем кнопку генерации пароля
+            $("#generatePassword").click(function() {
+                var password = generatePassword(8);
+                $("#password").val(password);
+                $("#confirmPassword").val(password);
+                
+                // Если пароль сгенерирован и чекбокс "Показать пароль" отмечен, показываем пароль
+                if ($("#showPassword").is(":checked")) {
+                    $("#password").attr("type", "text");
+                    $("#confirmPassword").attr("type", "text");
+                }
+            });
+            
+            // Обработчик чекбокса "Показать пароль"
+            $("#showPassword").change(function() {
+                if(this.checked) {
+                    $("#password").attr("type", "text");
+                    $("#confirmPassword").attr("type", "text");
+                } else {
+                    $("#password").attr("type", "password");
+                    $("#confirmPassword").attr("type", "password");
                 }
             });
         });

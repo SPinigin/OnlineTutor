@@ -1,0 +1,27 @@
+﻿/* Стили для страниц администратора */
+
+/* Дашборд администратора */
+.admin-dashboard .card {
+    height: 100%;
+}
+
+/* Таблицы для управления пользователями */
+.admin-table {
+    font-size: 0.95rem;
+}
+
+    .admin-table th {
+        background-color: rgba(58, 110, 165, 0.05);
+    }
+
+/* Стили для управления студентами */
+.student-list-item {
+    padding: 0.75rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+    .student-list-item:hover {
+        background-color: rgba(58, 110, 165, 0.05);
+    }

@@ -1,0 +1,47 @@
+﻿/* Стили для страниц аккаунта */
+
+/* Стили для форм входа и регистрации */
+.login-form, .register-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Стили для страницы профиля */
+.profile-section {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.5rem;
+}
+
+.profile-name {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-email {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Стили для страницы ожидания подтверждения */
+.awaiting-verification {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.awaiting-verification-icon {
+    font-size: 4rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}

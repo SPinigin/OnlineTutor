@@ -53,7 +53,13 @@
                             @foreach (var student in Model)
                             {
                                 <tr>
-                                    <td>@student.FullName</td>
+                                    <td>
+                                        @student.FullName
+                                        @if (!student.IsVerified)
+                                        {
+                                            <span class="badge bg-warning">Не подтвержден</span>
+                                        }
+                                    </td>
                                     <td>@student.Email</td>
                                     <td>@student.Grade</td>
                                     <td>@student.ClassName</td>

@@ -1,0 +1,17 @@
+﻿/* Стили для страниц учителя */
+
+/* Кабинет учителя */
+.teacher-dashboard .card {
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .teacher-dashboard .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
+
+/* Страница классов */
+.class-card {
+    margin-bottom: 1.5rem;
+}

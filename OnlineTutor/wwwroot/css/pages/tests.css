@@ -1,0 +1,51 @@
+﻿/* Стили для страниц тестов */
+
+/* Список тестов */
+.test-list-item {
+    padding: 1rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+    .test-list-item:hover {
+        background-color: rgba(58, 110, 165, 0.05);
+    }
+
+/* Вопросы теста */
+.question-list .list-group-item {
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Варианты ответов */
+.option-row {
+    position: relative;
+}
+
+.remove-option {
+    margin-left: 0.5rem;
+}
+
+/* Стили для прохождения теста */
+.test-timer {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.test-question {
+    margin-bottom: 2rem;
+}
+
+.test-question-text {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.test-option {
+    margin-bottom: 0.5rem;
+}
