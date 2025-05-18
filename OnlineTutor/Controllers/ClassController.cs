@@ -5,10 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineTutor.Data;
 using OnlineTutor.Models;
 using OnlineTutor.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineTutor.Controllers
 {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OnlineTutor.Models.ViewModels
+﻿namespace OnlineTutor.Models.ViewModels
 {
     public class ClassDetailsViewModel
     {
