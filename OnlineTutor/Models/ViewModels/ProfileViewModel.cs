@@ -21,6 +21,11 @@ namespace OnlineTutor.Models.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Display(Name = "Телефон")]
+        [Phone(ErrorMessage = "Некорректный номер телефона")]
+        [RegularExpression(@"^(\+7|7|8)?[\s\-]?[489][0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$", ErrorMessage = "Некорректный формат телефона")]
+        public string PhoneNumber { get; set; }
+
         [Display(Name = "Роль")]
         public UserRole Role { get; set; }
 

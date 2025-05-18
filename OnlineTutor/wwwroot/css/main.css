@@ -24,3 +24,5 @@
 @import url('pages/teacher.css');
 @import url('pages/student.css');
 @import url('pages/tests.css');
+
+@import url('base/fixes.css');

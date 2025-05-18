@@ -28,10 +28,9 @@ namespace OnlineTutor.Models
         /// <summary>
         /// Класс ученика (например, "5А", "11Б")
         /// </summary>
-        [Required(ErrorMessage = "Класс обязателен для заполнения")]
         [Display(Name = "Класс")]
         [StringLength(10, ErrorMessage = "Класс не может быть длиннее 10 символов")]
-        public string Grade { get; set; }
+        public string? Grade { get; set; }
 
         /// <summary>
         /// Дата рождения ученика

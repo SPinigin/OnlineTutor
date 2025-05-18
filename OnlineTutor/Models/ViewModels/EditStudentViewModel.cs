@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineTutor.Models.ViewModels
 {
@@ -12,6 +10,11 @@ namespace OnlineTutor.Models.ViewModels
         [EmailAddress(ErrorMessage = "Некорректный формат Email")]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Display(Name = "Телефон")]
+        [Phone(ErrorMessage = "Некорректный номер телефона")]
+        [RegularExpression(@"^(\+7|7|8)?[\s\-]?[489][0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$", ErrorMessage = "Некорректный формат телефона")]
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Поле Имя обязательно для заполнения")]
         [Display(Name = "Имя")]
@@ -33,9 +36,8 @@ namespace OnlineTutor.Models.ViewModels
         public string NewPassword { get; set; }
 
         [Display(Name = "Класс (например, 10А)")]
-        [Required(ErrorMessage = "Поле Класс обязательно для заполнения")]
         [StringLength(10, ErrorMessage = "Класс не может быть длиннее 10 символов")]
-        public string Grade { get; set; }
+        public string? Grade { get; set; }
 
         [Required(ErrorMessage = "Дата рождения обязательна")]
         [Display(Name = "Дата рождения")]
@@ -45,6 +47,6 @@ namespace OnlineTutor.Models.ViewModels
         [Display(Name = "Класс (группа)")]
         public int? ClassId { get; set; }
 
-        public List<Class> AvailableClasses { get; set; } = new List<Class>();
+        public List<string> AvailableClassNames { get; set; } = new List<string>();
     }
 }

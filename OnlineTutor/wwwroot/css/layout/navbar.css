@@ -1,7 +1,29 @@
 ﻿/* Стили для навигационной панели */
 .navbar {
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     position: relative;
+}
+
+/* Логотип всегда слева */
+.navbar-brand {
+    transition: all 0.3s ease;
+    margin-right: 1.5rem;
+}
+
+    .navbar-brand svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+/* Скрываем текст логотипа на малых экранах */
+@media (max-width: 576px) {
+    .navbar-brand svg text {
+        display: none;
+    }
+
+    .navbar-brand svg {
+        width: 100px;
+    }
 }
 
 /* Стили для кнопок навигации */
@@ -17,7 +39,7 @@
     .nav-button:hover {
         background-color: var(--primary-light);
         transform: translateY(-2px);
-        text-decoration: none;
+        text-decoration: none !important;
     }
 
     .nav-button.active {
@@ -34,63 +56,64 @@
         align-items: center;
     }
 
-@media (max-width: 768px) {
-    .navbar {
-        padding: 0.5rem;
+    /* Стиль для формы выхода в навигационной панели */
+    .navbar-nav .form-inline {
+        display: flex;
+        width: 100%;
+    }
+
+        /* Стиль для кнопки выхода */
+        .navbar-nav .form-inline .nav-button {
+            flex: 1;
+        }
+
+/* Стили для мобильного меню */
+@media (max-width: 991px) {
+    /* ... существующие стили ... */
+
+    .navbar-nav .form-inline {
+        width: 100%;
+    }
+
+        .navbar-nav .form-inline .nav-button {
+            width: 100%;
+            margin: 0.3rem 0;
+        }
+}
+
+/* Стили для мобильного меню */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
     }
 
     .navbar-nav {
         flex-direction: column;
         align-items: stretch;
-    }
-}
-
-@media (max-width: 576px) {
-    .navbar-brand.mx-auto {
-        position: relative;
-        left: auto;
-        transform: none;
-    }
-
-    .nav-button {
-        margin: 0.5rem 0;
-        display: inline-block;
-        text-align: center;
-    }
-}
-
-/* Улучшение адаптации навигационных кнопок */
-.nav-button {
-    white-space: nowrap; /* Предотвращает перенос текста */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Добавляет многоточие при переполнении */
-    max-width: 100%;
-}
-
-/* Стили для мобильных устройств */
-@media (max-width: 991px) {
-    .navbar-nav {
-        flex-wrap: wrap;
-    }
-
-    .nav-item {
         width: 100%;
-        margin-bottom: 0.25rem;
     }
+
+        .navbar-nav .nav-item {
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
 
     .nav-button {
         display: block;
         width: 100%;
-        text-align: left;
-        padding: 0.5rem 1rem !important;
+        text-align: center;
+        margin: 0.3rem 0;
     }
-}
 
-/* Для очень маленьких экранов можно сделать кнопки компактнее */
-@media (max-width: 576px) {
-    .nav-button {
-        padding: 0.4rem 0.75rem !important;
-        font-size: 0.9rem;
+    .navbar-toggler {
+        border: 1px solid var(--primary-color);
+        padding: 0.25rem 0.5rem;
     }
-}
 
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.1rem var(--primary-color);
+            outline: none;
+        }
+}

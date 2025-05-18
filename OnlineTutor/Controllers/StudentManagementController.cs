@@ -6,6 +6,8 @@ using OnlineTutor.Data;
 using OnlineTutor.Models;
 using OnlineTutor.Models.ViewModels;
 using System.Text.RegularExpressions;
+using OfficeOpenXml;
+using System.Text;
 
 namespace OnlineTutor.Controllers
 {
@@ -49,7 +51,6 @@ namespace OnlineTutor.Controllers
                     FullName = student.FullName,
                     Email = student.Email,
                     Grade = profile?.Grade ?? "-",
-                    ClassName = profile?.Class?.Name ?? "-",
                     IsVerified = student.IsVerified // Добавляем это свойство
                 };
 
@@ -65,9 +66,18 @@ namespace OnlineTutor.Controllers
         {
             var model = new CreateStudentViewModel
             {
-                AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync(),
                 DateOfBirth = DateTime.Now.AddYears(-15) // Устанавливаем примерную дату рождения для ученика
             };
+
+            // Получаем уникальные названия классов из базы данных
+            var gradeNames = await _context.StudentProfiles
+                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                .Select(sp => sp.Grade)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
+            model.AvailableClassNames = gradeNames;
 
             return View(model);
         }
@@ -84,7 +94,17 @@ namespace OnlineTutor.Controllers
                 if (existingUser != null)
                 {
                     ModelState.AddModelError(string.Empty, "Этот email уже зарегистрирован в системе.");
-                    model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    model.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -93,7 +113,17 @@ namespace OnlineTutor.Controllers
                     !Regex.IsMatch(model.LastName, @"^[а-яА-ЯёЁa-zA-Z\s-]+$"))
                 {
                     ModelState.AddModelError(string.Empty, "Имя и фамилия должны содержать только буквы.");
-                    model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    model.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -102,7 +132,17 @@ namespace OnlineTutor.Controllers
                     !Regex.IsMatch(model.MiddleName, @"^[а-яА-ЯёЁa-zA-Z\s-]+$"))
                 {
                     ModelState.AddModelError(string.Empty, "Отчество должно содержать только буквы.");
-                    model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    model.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -111,6 +151,7 @@ namespace OnlineTutor.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     MiddleName = model.MiddleName,
@@ -133,8 +174,7 @@ namespace OnlineTutor.Controllers
                     {
                         UserId = user.Id,
                         Grade = model.Grade,
-                        DateOfBirth = model.DateOfBirth,
-                        ClassId = model.ClassId
+                        DateOfBirth = model.DateOfBirth
                     };
 
                     _context.StudentProfiles.Add(studentProfile);
@@ -161,7 +201,16 @@ namespace OnlineTutor.Controllers
             }
 
             // Если мы дошли до этой точки, что-то пошло не так, возвращаем форму
-            model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+            // Получаем уникальные названия классов из базы данных
+            var classNames = await _context.StudentProfiles
+                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                .Select(sp => sp.Grade)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
+            model.AvailableClassNames = classNames;
+
             return View(model);
         }
 
@@ -182,6 +231,14 @@ namespace OnlineTutor.Controllers
                 return NotFound("Профиль студента не найден");
             }
 
+            // Получаем уникальные названия классов из базы данных
+            var gradeNames = await _context.StudentProfiles
+                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                .Select(sp => sp.Grade)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
             var model = new EditStudentViewModel
             {
                 Id = user.Id,
@@ -191,8 +248,7 @@ namespace OnlineTutor.Controllers
                 Email = user.Email,
                 Grade = studentProfile.Grade,
                 DateOfBirth = studentProfile.DateOfBirth,
-                ClassId = studentProfile.ClassId,
-                AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync()
+                AvailableClassNames = gradeNames
             };
 
             return View(model);
@@ -231,7 +287,17 @@ namespace OnlineTutor.Controllers
                     if (existingUser != null && existingUser.Id != id)
                     {
                         ModelState.AddModelError(string.Empty, "Этот email уже зарегистрирован в системе.");
-                        model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+
+                        // Получаем уникальные названия классов из базы данных
+                        var gradeNames = await _context.StudentProfiles
+                            .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                            .Select(sp => sp.Grade)
+                            .Distinct()
+                            .OrderBy(g => g)
+                            .ToListAsync();
+
+                        model.AvailableClassNames = gradeNames;
+
                         return View(model);
                     }
                 }
@@ -241,7 +307,17 @@ namespace OnlineTutor.Controllers
                     !Regex.IsMatch(model.LastName, @"^[а-яА-ЯёЁa-zA-Z\s-]+$"))
                 {
                     ModelState.AddModelError(string.Empty, "Имя и фамилия должны содержать только буквы.");
-                    model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    model.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -250,7 +326,17 @@ namespace OnlineTutor.Controllers
                     !Regex.IsMatch(model.MiddleName, @"^[а-яА-ЯёЁa-zA-Z\s-]+$"))
                 {
                     ModelState.AddModelError(string.Empty, "Отчество должно содержать только буквы.");
-                    model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    model.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -259,12 +345,12 @@ namespace OnlineTutor.Controllers
                 user.LastName = model.LastName;
                 user.MiddleName = model.MiddleName;
                 user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
                 user.UserName = model.Email; // UserName должен совпадать с Email
 
                 // Обновляем профиль студента
                 studentProfile.Grade = model.Grade;
                 studentProfile.DateOfBirth = model.DateOfBirth;
-                studentProfile.ClassId = model.ClassId;
 
                 // Сохраняем изменения
                 var result = await _userManager.UpdateAsync(user);
@@ -285,7 +371,16 @@ namespace OnlineTutor.Controllers
                             {
                                 ModelState.AddModelError(string.Empty, error.Description);
                             }
-                            model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+                            // Получаем уникальные названия классов из базы данных
+                            var gradeNames = await _context.StudentProfiles
+                                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                                .Select(sp => sp.Grade)
+                                .Distinct()
+                                .OrderBy(g => g)
+                                .ToListAsync();
+
+                            model.AvailableClassNames = gradeNames;
+
                             return View(model);
                         }
                     }
@@ -300,7 +395,16 @@ namespace OnlineTutor.Controllers
                 }
             }
 
-            model.AvailableClasses = await _context.Classes.OrderBy(c => c.Name).ToListAsync();
+            // Получаем уникальные названия классов из базы данных
+            var classNames = await _context.StudentProfiles
+                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                .Select(sp => sp.Grade)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
+            model.AvailableClassNames = classNames;
+
             return View(model);
         }
 
@@ -330,7 +434,6 @@ namespace OnlineTutor.Controllers
                 Grade = studentProfile.Grade,
                 DateOfBirth = studentProfile.DateOfBirth,
                 Age = studentProfile.Age,
-                ClassName = studentProfile.Class?.Name ?? "-"
             };
 
             return View(model);
@@ -362,7 +465,6 @@ namespace OnlineTutor.Controllers
                 Grade = studentProfile.Grade,
                 DateOfBirth = studentProfile.DateOfBirth,
                 Age = studentProfile.Age,
-                ClassName = studentProfile.Class?.Name ?? "-"
             };
 
             return View(model);
@@ -400,6 +502,116 @@ namespace OnlineTutor.Controllers
                 TempData["ErrorMessage"] = error.Description;
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult ImportStudents()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportStudents(IFormFile excelFile)
+        {
+            if (excelFile == null || excelFile.Length == 0)
+            {
+                ModelState.AddModelError("", "Файл не выбран");
+                return View();
+            }
+
+            var students = new List<StudentImportDto>();
+
+            // Для работы с кириллицей
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            using (var stream = new MemoryStream())
+            {
+                await excelFile.CopyToAsync(stream);
+
+                using (var package = new ExcelPackage(stream))
+                {
+                    var worksheet = package.Workbook.Worksheets[0]; // Первый лист
+
+                    // Начинаем с 2-й строки, предполагая что 1-я - заголовки
+                    for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                    {
+                        try
+                        {
+                            var student = new StudentImportDto
+                            {
+                                LastName = worksheet.Cells[row, 1].Value?.ToString(),
+                                FirstName = worksheet.Cells[row, 2].Value?.ToString(),
+                                MiddleName = worksheet.Cells[row, 3].Value?.ToString(),
+                                Email = worksheet.Cells[row, 4].Value?.ToString(),
+                                PhoneNumber = worksheet.Cells[row, 5].Value?.ToString(),
+                                Grade = worksheet.Cells[row, 6].Value?.ToString(),
+                                DateOfBirth = Convert.ToDateTime(worksheet.Cells[row, 7].Value)
+                            };
+
+                            students.Add(student);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Логируем ошибку для строки
+                            TempData["ImportErrors"] += $"Ошибка в строке {row}: {ex.Message}\n";
+                        }
+                    }
+                }
+            }
+
+            // Массовое добавление учеников
+            int successCount = 0;
+            int errorCount = 0;
+
+            foreach (var studentDto in students)
+            {
+                try
+                {
+                    var user = new User
+                    {
+                        UserName = studentDto.Email,
+                        Email = studentDto.Email,
+                        PhoneNumber = studentDto.PhoneNumber,
+                        FirstName = studentDto.FirstName,
+                        LastName = studentDto.LastName,
+                        MiddleName = studentDto.MiddleName,
+                        Role = UserRole.Student,
+                        IsVerified = false
+                    };
+
+                    var result = await _userManager.CreateAsync(user, GenerateRandomPassword());
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Student");
+
+                        var studentProfile = new StudentProfile
+                        {
+                            UserId = user.Id,
+                            Grade = studentDto.Grade,
+                            DateOfBirth = studentDto.DateOfBirth
+                        };
+
+                        _context.StudentProfiles.Add(studentProfile);
+                        successCount++;
+                    }
+                    else
+                    {
+                        errorCount++;
+                        TempData["ImportErrors"] += string.Join("\n", result.Errors.Select(e => e.Description));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorCount++;
+                    TempData["ImportErrors"] += $"Ошибка при добавлении {studentDto.Email}: {ex.Message}\n";
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Импорт завершен. Добавлено: {successCount}, Ошибок: {errorCount}";
             return RedirectToAction(nameof(Index));
         }
 

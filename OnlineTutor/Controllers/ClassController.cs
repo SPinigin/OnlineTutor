@@ -29,6 +29,7 @@ namespace OnlineTutor.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var classes = await _context.Classes
+                .Include(c => c.Students)
                 .Where(c => c.TeacherId == currentUser.Id)
                 .OrderBy(c => c.Name)
                 .ToListAsync();

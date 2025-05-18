@@ -157,3 +157,10 @@
         height: 32px;
     }
 }
+
+.footer a:hover,
+.footer-links a:hover,
+.footer-links-bottom a:hover,
+.social-link:hover {
+    text-decoration: none !important;
+}

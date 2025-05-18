@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Импорт учеников";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Импорт учеников из Excel</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ImportStudents" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Выберите файл Excel</label>
+                            <input type="file" name="excelFile" class="form-control" accept=".xlsx,.xls" required />
+                            <small class="form-text text-muted">
+                                Файл должен содержать столбцы:
+                                Фамилия, Имя, Отчество, Email, Телефон, Класс, Дата рождения
+                            </small>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-file-upload"></i> Загрузить учеников
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Пример шаблона файла</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Фамилия</th>
+                                <th>Имя</th>
+                                <th>Отчество</th>
+                                <th>Email</th>
+                                <th>Телефон</th>
+                                <th>Класс</th>
+                                <th>Дата рождения</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Иванов</td>
+                                <td>Иван</td>
+                                <td>Иванович</td>
+                                <td>ivanov@mail.ru</td>
+                                <td>+79991234567</td>
+                                <td>10А</td>
+                                <td>01.09.2005</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,75 @@
         box-shadow: var(--shadow-md);
     }
 
-/* Страница классов */
-.class-card {
-    margin-bottom: 1.5rem;
+/* Заголовки секций */
+.section-header {
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .section-header h3 {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .section-header i {
+        margin-right: 0.5rem;
+    }
+
+/* Карточки */
+.card-fixed-height {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+    .card-fixed-height .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card-fixed-height .card-text {
+        flex-grow: 1;
+    }
+
+    .card-fixed-height .btn {
+        margin-top: auto;
+    }
+
+/* Кнопки в карточках */
+.card .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+    .card .btn i {
+        margin-right: 0.5rem;
+    }
+
+    .card .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(58, 110, 165, 0.2);
+    }
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .section-header {
+        margin: 1.5rem 0 0.75rem 0;
+    }
+
+        .section-header h3 {
+            font-size: 1.25rem;
+        }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-fixed-height {
+        margin-bottom: 1rem;
+    }
 }

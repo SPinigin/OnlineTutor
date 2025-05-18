@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineTutor.Models.ViewModels;
 using OnlineTutor.Models;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System;
 using Microsoft.EntityFrameworkCore;
 using OnlineTutor.Data;
 
@@ -32,8 +30,18 @@ namespace OnlineTutor.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            // Получаем уникальные названия классов из базы данных
+            var gradeNames = await _context.StudentProfiles
+                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                .Select(sp => sp.Grade)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
+            ViewBag.AvailableClassNames = gradeNames;
+
             return View();
         }
 
@@ -49,6 +57,17 @@ namespace OnlineTutor.Controllers
                 if (existingUser != null)
                 {
                     ModelState.AddModelError(string.Empty, "Этот email уже зарегистрирован в системе.");
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    ViewBag.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -57,6 +76,17 @@ namespace OnlineTutor.Controllers
                     !Regex.IsMatch(model.LastName, @"^[а-яА-ЯёЁa-zA-Z\s-]+$"))
                 {
                     ModelState.AddModelError(string.Empty, "Имя и фамилия должны содержать только буквы.");
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    ViewBag.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -65,6 +95,17 @@ namespace OnlineTutor.Controllers
                     !Regex.IsMatch(model.MiddleName, @"^[а-яА-ЯёЁa-zA-Z\s-]+$"))
                 {
                     ModelState.AddModelError(string.Empty, "Отчество должно содержать только буквы.");
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    ViewBag.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
@@ -72,6 +113,7 @@ namespace OnlineTutor.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     MiddleName = model.MiddleName,
@@ -90,22 +132,37 @@ namespace OnlineTutor.Controllers
                     // Для учителей и администраторов требуется дополнительная проверка
                     // или можно вообще запретить такую регистрацию
                     ModelState.AddModelError(string.Empty, "Самостоятельная регистрация доступна только для учеников.");
+
+                    // Получаем уникальные названия классов из базы данных
+                    var gradeNames = await _context.StudentProfiles
+                        .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                        .Select(sp => sp.Grade)
+                        .Distinct()
+                        .OrderBy(g => g)
+                        .ToListAsync();
+
+                    ViewBag.AvailableClassNames = gradeNames;
+
                     return View(model);
                 }
 
                 // Добавление специфических полей в зависимости от роли
                 if (model.Role == UserRole.Student)
                 {
-                    // Валидация для ученика
-                    if (string.IsNullOrEmpty(model.Grade))
-                    {
-                        ModelState.AddModelError(string.Empty, "Необходимо указать класс для ученика.");
-                        return View(model);
-                    }
-
                     if (!model.DateOfBirth.HasValue)
                     {
                         ModelState.AddModelError(string.Empty, "Необходимо указать дату рождения для ученика.");
+
+                        // Получаем уникальные названия классов из базы данных
+                        var gradeNames = await _context.StudentProfiles
+                            .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                            .Select(sp => sp.Grade)
+                            .Distinct()
+                            .OrderBy(g => g)
+                            .ToListAsync();
+
+                        ViewBag.AvailableClassNames = gradeNames;
+
                         return View(model);
                     }
                 }
@@ -115,18 +172,51 @@ namespace OnlineTutor.Controllers
                     if (string.IsNullOrEmpty(model.Subject))
                     {
                         ModelState.AddModelError(string.Empty, "Необходимо указать предмет для учителя.");
+
+                        // Получаем уникальные названия классов из базы данных
+                        var gradeNames = await _context.StudentProfiles
+                            .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                            .Select(sp => sp.Grade)
+                            .Distinct()
+                            .OrderBy(g => g)
+                            .ToListAsync();
+
+                        ViewBag.AvailableClassNames = gradeNames;
+
                         return View(model);
                     }
 
                     if (!model.TeachingExperience.HasValue || model.TeachingExperience < 0)
                     {
                         ModelState.AddModelError(string.Empty, "Необходимо указать корректный опыт работы.");
+
+                        // Получаем уникальные названия классов из базы данных
+                        var gradeNames = await _context.StudentProfiles
+                            .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                            .Select(sp => sp.Grade)
+                            .Distinct()
+                            .OrderBy(g => g)
+                            .ToListAsync();
+
+                        ViewBag.AvailableClassNames = gradeNames;
+
                         return View(model);
                     }
 
                     if (string.IsNullOrEmpty(model.Education))
                     {
                         ModelState.AddModelError(string.Empty, "Необходимо указать образование.");
+
+                        // Получаем уникальные названия классов из базы данных
+                        var gradeNames = await _context.StudentProfiles
+                            .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                            .Select(sp => sp.Grade)
+                            .Distinct()
+                            .OrderBy(g => g)
+                            .ToListAsync();
+
+                        ViewBag.AvailableClassNames = gradeNames;
+
                         return View(model);
                     }
                 }
@@ -199,6 +289,16 @@ namespace OnlineTutor.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
+            // Получаем уникальные названия классов из базы данных
+            var classNames = await _context.StudentProfiles
+                .Where(sp => !string.IsNullOrEmpty(sp.Grade))
+                .Select(sp => sp.Grade)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
+            ViewBag.AvailableClassNames = classNames;
 
             // Если мы дошли до этой точки, что-то пошло не так, возвращаем форму
             return View(model);
@@ -385,6 +485,7 @@ namespace OnlineTutor.Controllers
                 LastName = user.LastName,
                 MiddleName = user.MiddleName,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 Role = user.Role
             };
 
@@ -423,6 +524,7 @@ namespace OnlineTutor.Controllers
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.MiddleName = model.MiddleName;
+                user.PhoneNumber = model.PhoneNumber;
 
                 // Обновляем данные профиля в зависимости от роли
                 if (user.Role == UserRole.Student)

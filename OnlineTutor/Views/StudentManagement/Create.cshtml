@@ -37,16 +37,28 @@
                         </div>
 
                         <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">Телефон</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+7</span>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="(999) 123-45-67" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <small class="form-text text-muted">Введите номер телефона в формате +7 (999) 123-45-67</small>
+                        </div>
+
+                        <div class="mb-3">
                             <label asp-for="Email" class="form-label"></label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="form-group mb-3 password-container">
                             <label asp-for="Password" class="form-label"></label>
-                            <div class="input-group">
-                                <input asp-for="Password" class="form-control" id="password" type="password" />
-                                <button type="button" class="btn btn-outline-secondary" id="generatePassword">
+                            <div class="d-flex gap-2">
+                                <div class="flex-grow-1">
+                                    <input asp-for="Password" class="form-control" type="password" id="password" />
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="generatePassword">
                                     <i class="fas fa-sync-alt"></i> Сгенерировать
                                 </button>
                             </div>
@@ -55,15 +67,21 @@
                                 <label class="form-check-label" for="showPassword">Показать пароль</label>
                             </div>
                             <span asp-validation-for="Password" class="text-danger"></span>
-                            <small class="form-text text-muted">Если не указать пароль, он будет сгенерирован автоматически.</small>
                         </div>
 
                         <h5 class="mb-3 mt-4">Учебная информация</h5>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Grade" class="form-label"></label>
-                                <input asp-for="Grade" class="form-control" placeholder="Например: 10А" />
+                                <select asp-for="Grade" class="form-select">
+                                    <option value="">-- Выберите класс (необязательно) --</option>
+                                    @foreach (var classItem in Model.AvailableClassNames)
+                                    {
+                                        <option value="@classItem">@classItem</option>
+                                    }
+                                </select>
                                 <span asp-validation-for="Grade" class="text-danger"></span>
+                                <small class="form-text text-muted">Можно оставить пустым, если класс еще не определен.</small>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="DateOfBirth" class="form-label"></label>
@@ -71,19 +89,6 @@
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label asp-for="ClassId" class="form-label"></label>
-                            <select asp-for="ClassId" class="form-select">
-                                <option value="">-- Выберите класс (группу) --</option>
-                                @foreach (var classItem in Model.AvailableClasses)
-                                {
-                                    <option value="@classItem.Id">@classItem.Name (@classItem.Year г.)</option>
-                                }
-                            </select>
-                            <span asp-validation-for="ClassId" class="text-danger"></span>
-                        </div>
-
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                             <a asp-action="Index" class="btn btn-secondary me-md-2">Отмена</a>
                             <button type="submit" class="btn btn-primary">Добавить ученика</button>

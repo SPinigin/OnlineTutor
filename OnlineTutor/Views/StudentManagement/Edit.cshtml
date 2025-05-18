@@ -38,6 +38,16 @@
                         </div>
 
                         <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">Телефон</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+7</span>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="(999) 123-45-67" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <small class="form-text text-muted">Введите номер телефона в формате +7 (999) 123-45-67</small>
+                        </div>
+
+                        <div class="mb-3">
                             <label asp-for="Email" class="form-label"></label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
@@ -63,8 +73,15 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Grade" class="form-label"></label>
-                                <input asp-for="Grade" class="form-control" placeholder="Например: 10А" />
+                                <select asp-for="Grade" class="form-select">
+                                    <option value="">-- Выберите класс (необязательно) --</option>
+                                    @foreach (var classItem in Model.AvailableClassNames)
+                                    {
+                                        <option value="@classItem">@classItem</option>
+                                    }
+                                </select>
                                 <span asp-validation-for="Grade" class="text-danger"></span>
+                                <small class="form-text text-muted">Можно оставить пустым, если класс еще не определен.</small>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="DateOfBirth" class="form-label"></label>
@@ -72,19 +89,6 @@
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label asp-for="ClassId" class="form-label"></label>
-                            <select asp-for="ClassId" class="form-select">
-                                <option value="">-- Выберите класс (группу) --</option>
-                                @foreach (var classItem in Model.AvailableClasses)
-                                {
-                                    <option value="@classItem.Id">@classItem.Name (@classItem.Year г.)</option>
-                                }
-                            </select>
-                            <span asp-validation-for="ClassId" class="text-danger"></span>
-                        </div>
-
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                             <a asp-action="Index" class="btn btn-secondary me-md-2">Отмена</a>
                             <button type="submit" class="btn btn-primary">Сохранить изменения</button>

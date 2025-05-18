@@ -111,6 +111,25 @@
     border-radius: var(--border-radius-md);
 }
 
+.input-group {
+    display: flex;
+    align-items: stretch;
+}
+
+    .input-group .form-control {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .input-group .btn {
+        display: flex;
+        align-items: center;
+    }
+
+        .input-group .btn i {
+            margin-right: 0.5rem;
+        }
+
 /* Валидация форм */
 .field-validation-error {
     color: #dc3545;
@@ -165,4 +184,24 @@
             padding-right: 0;
             padding-left: 0;
         }
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-input-group {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+    .password-input-group .form-control {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+.btn-generate-password {
+    margin-left: 0.5rem;
+    white-space: nowrap;
 }

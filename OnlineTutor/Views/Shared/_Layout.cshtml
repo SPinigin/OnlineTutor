@@ -3,84 +3,89 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Образовательный портал</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 @(User.Identity.IsAuthenticated ? "authorized" : "")">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link nav-button" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
 
-                    </ul>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    @await Html.PartialAsync("_Logo")
+                </a>
+
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav ms-auto">
-                        @if (User.Identity.IsAuthenticated)
-                        {
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <ul class="navbar-nav ms-auto">
                             @if (User.IsInRole("Administrator"))
                             {
+
                                 <li class="nav-item">
                                     <a class="nav-link nav-button" asp-controller="Admin" asp-action="Index">
                                         <i class="fas fa-cog"></i> Админ-панель
                                     </a>
                                 </li>
-                            }
-                            @if (User.IsInRole("Teacher"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link nav-button" asp-controller="Teacher" asp-action="Index">
-                                        <i class="fas fa-chalkboard-teacher"></i> Кабинет
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link nav-button" asp-controller="Class" asp-action="Index">
-                                        <i class="fas fa-users"></i> Классы
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link nav-button" asp-controller="Test" asp-action="Index">
-                                        <i class="fas fa-tasks"></i> Тесты
-                                    </a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Student"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link nav-button" asp-controller="Student" asp-action="Index">
-                                        <i class="fas fa-user-graduate"></i> Кабинет
-                                    </a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
-                            {
                                 <li class="nav-item">
                                     <a class="nav-link nav-button" asp-controller="StudentManagement" asp-action="Index">
                                         <i class="fas fa-user-plus"></i> Ученики
                                     </a>
                                 </li>
                             }
+                            @if (User.IsInRole("Teacher"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-button" asp-controller="Teacher" asp-action="Index">
+                                        <i class="fas fa-chalkboard-teacher"></i> Кабинет
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Student"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-button" asp-controller="Student" asp-action="Index">
+                                        <i class="fas fa-user-graduate"></i> Кабинет
+                                    </a>
+                                </li>
+                            }
+
                             <li class="nav-item">
-                                <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
-                                    <button type="submit" class="nav-link nav-button border-0">
+                                <form class="form-inline w-100" asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link nav-button border-0 w-100">
                                         <i class="fas fa-sign-out-alt"></i> Выйти
                                     </button>
                                 </form>
                             </li>
-                        }
-                        else
-                        {
+                        </ul>
+                    }
+                    else
+                    {
+
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link nav-button" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-home"></i> Главная
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-button" asp-controller="Home" asp-action="Privacy">
+                                    <i class="fas fa-info-circle"></i> О портале
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link nav-button" asp-controller="Account" asp-action="Login">
                                     <i class="fas fa-sign-in-alt"></i> Вход
@@ -91,14 +96,12 @@
                                     <i class="fas fa-user-plus"></i> Регистрация
                                 </a>
                             </li>
-                        }
-                    </ul>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
     </header>
-
-
     <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -126,9 +129,9 @@
                         <strong>Пинигин Сергей Николаевич</strong><br>
                     </p>
                     <div class="footer-social">
-                        <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="mailto:pinigin09@yandex.ru" class="social-link"><i class="fas fa-envelope"></i></a>
+                        <a href="https://t.me/SPin09?text=Здравствуйте!%20Я%20с%20вашего%20образовательного%20портала." class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="https://github.com/SPinigin" class="social-link"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,19 @@
+﻿a:hover,
+a.btn:hover,
+a.nav-link:hover,
+a.nav-button:hover,
+a.navbar-brand:hover,
+a.footer-link:hover,
+a.social-link:hover,
+a.card-link:hover,
+.btn:hover,
+.nav-button:hover,
+.navbar-brand:hover,
+.footer-links a:hover,
+.footer-links-bottom a:hover,
+.social-link:hover,
+.card a:hover,
+.role-card a:hover,
+.role-card-btn:hover {
+    text-decoration: none !important;
+}

@@ -174,3 +174,12 @@
             border-top-right-radius: var(--border-radius-md);
             border-bottom-right-radius: var(--border-radius-md);
         }
+
+.btn:hover,
+.nav-button:hover,
+a.btn:hover,
+button.btn:hover,
+.role-card-btn:hover,
+.card a:hover {
+    text-decoration: none !important;
+}

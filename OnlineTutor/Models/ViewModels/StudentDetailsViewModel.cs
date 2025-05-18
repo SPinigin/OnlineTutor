@@ -10,6 +10,9 @@ namespace OnlineTutor.Models.ViewModels
         [Display(Name = "ФИО")]
         public string FullName { get; set; }
 
+        [Display(Name = "Телефон")]
+        public string PhoneNumber { get; set; }
+
         [Display(Name = "Email")]
         public string Email { get; set; }
 
@@ -22,8 +25,5 @@ namespace OnlineTutor.Models.ViewModels
 
         [Display(Name = "Возраст")]
         public int Age { get; set; }
-
-        [Display(Name = "Учебная группа")]
-        public string ClassName { get; set; }
     }
 }

@@ -45,7 +45,7 @@ a {
 
     a:hover {
         color: var(--primary-light);
-        text-decoration: underline;
+        text-decoration: none;
     }
 
 .text-primary {

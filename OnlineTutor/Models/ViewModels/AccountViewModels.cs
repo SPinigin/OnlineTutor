@@ -24,6 +24,11 @@ namespace OnlineTutor.Models.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Display(Name = "Телефон")]
+        [Phone(ErrorMessage = "Некорректный номер телефона")]
+        [RegularExpression(@"^(\+7|7|8)?[\s\-]?[489][0-9]{2}[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$", ErrorMessage = "Некорректный формат телефона")]
+        public string PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Поле Имя обязательно для заполнения")]
         [Display(Name = "Имя")]
         public string FirstName { get; set; }
@@ -52,6 +57,7 @@ namespace OnlineTutor.Models.ViewModels
 
         // Дополнительные поля для учеников
         [Display(Name = "Класс")]
+        [StringLength(10, ErrorMessage = "Класс не может быть длиннее 10 символов")]
         public string? Grade { get; set; }
 
         [Display(Name = "Дата рождения")]

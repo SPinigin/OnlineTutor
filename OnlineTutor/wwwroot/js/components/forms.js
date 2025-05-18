@@ -58,49 +58,46 @@ const Forms = {
     setupPasswordGenerators: function () {
         // Функция для генерации случайного пароля
         function generatePassword(length = 8) {
-            const lowerChars = "abcdefghijklmnopqrstuvwxyz";
-            const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const numbers = "0123456789";
-            const specialChars = "!$%^&*";
+            const charset = {
+                lowercase: 'abcdefghijklmnopqrstuvwxyz',
+                uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                numbers: '0123456789',
+                special: '!@#$%^&*'
+            };
 
-            const allChars = lowerChars + upperChars + numbers + specialChars;
-            let password = "";
+            let password = '';
 
-            // Гарантируем наличие заглавной буквы, строчной буквы, цифры и специального символа
-            password += upperChars.charAt(Math.floor(Math.random() * upperChars.length));
-            password += lowerChars.charAt(Math.floor(Math.random() * lowerChars.length));
-            password += numbers.charAt(Math.floor(Math.random() * numbers.length));
-            password += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
+            // Гарантируем наличие всех типов символов
+            password += charset.uppercase[Math.floor(Math.random() * charset.uppercase.length)];
+            password += charset.lowercase[Math.floor(Math.random() * charset.lowercase.length)];
+            password += charset.numbers[Math.floor(Math.random() * charset.numbers.length)];
+            password += charset.special[Math.floor(Math.random() * charset.special.length)];
 
-            // Дополняем до нужной длины
-            for (let i = 4; i < length; i++) {
-                password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+            // Добавляем остальные символы
+            const allChars = Object.values(charset).join('');
+            for (let i = password.length; i < length; i++) {
+                password += allChars[Math.floor(Math.random() * allChars.length)];
             }
 
             // Перемешиваем символы
-            password = password.split('').sort(function () {
-                return 0.5 - Math.random();
-            }).join('');
-
-            return password;
+            return password.split('').sort(() => Math.random() - 0.5).join('');
         }
 
-        // Обработчик кнопки генерации пароля
-        $(".btn-generate-password").on("click", function () {
-            const targetInput = $(this).data('target') || $(this).prev('input[type="password"]');
-            const confirmInput = $(this).data('confirm');
+        $(document).ready(function () {
+            $('#generatePassword').on('click', function () {
+                const password = generatePassword(12);
+                $('#password').val(password);
+                $('#confirmPassword').val(password);
 
-            const password = generatePassword(8);
-            $(targetInput).val(password);
+                if ($('#showPassword').is(':checked')) {
+                    $('#password, #confirmPassword').attr('type', 'text');
+                }
+            });
 
-            if (confirmInput) {
-                $(confirmInput).val(password);
-            }
-
-            // Если пароль сгенерирован и поле видимо, показываем пароль
-            if ($(targetInput).attr("type") === "text") {
-                $(targetInput).focus();
-            }
+            $('#showPassword').on('change', function () {
+                const type = $(this).is(':checked') ? 'text' : 'password';
+                $('#password, #confirmPassword').attr('type', type);
+            });
         });
     },
 
