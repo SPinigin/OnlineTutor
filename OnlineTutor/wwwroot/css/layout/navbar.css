@@ -158,11 +158,11 @@
 }
 
 body {
-    padding-top: 70px; /* Высота navbar */
+    padding-top: 10px; /* Высота navbar */
 }
 
 @media (max-width: 991px) {
     body {
-        padding-top: 90px; /* Немного больше высоты для мобильных */
+        padding-top: 10px; /* Немного больше высоты для мобильных */
     }
 }

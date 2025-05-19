@@ -10,6 +10,9 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="d-flex flex-column min-vh-100 @(User.Identity.IsAuthenticated ? "authorized" : "")">
+    <div class="hero-section">
+        <h1 class="hero-title">Образовательный портал по русскому языку</h1>
+    </div>
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container-fluid px-4">
