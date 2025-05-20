@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using OnlineTutor.Data;
 using OnlineTutor.Models;
 using OnlineTutor.Models.ViewModels;
+using System.Text;
 
 namespace OnlineTutor.Controllers
 {
@@ -591,6 +593,336 @@ namespace OnlineTutor.Controllers
         {
             ViewBag.Index = 0; // Индекс будет заменен на клиенте
             return PartialView("_OptionRow", new QuestionOptionViewModel());
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> Topics()
+        //{
+        //    var topics = await _context.TestTopics
+        //        .Include(t => t.Tests)
+        //        .ToListAsync();
+        //    return View(topics);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> Topics()
+        //{
+        //    var topics = await _context.TestTopics
+        //        .Include(t => t.Tests)
+        //        .ToListAsync();
+        //    return View(topics);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> Groups()
+        //{
+        //    var groups = await _context.TestGroups.ToListAsync();
+        //    return View(groups);
+        //}
+
+        [HttpGet]
+        public async Task<IActionResult> CreateTopic()
+        {
+            return View();
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateTopic(TestTopic model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.TestTopics.Add(model);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Topics));
+        //    }
+        //    return View(model);
+        //}
+
+        [HttpGet]
+        public async Task<IActionResult> CreateGroup()
+        {
+            return View();
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateGroup(TestGroup model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.TestGroups.Add(model);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Groups));
+        //    }
+        //    return View(model);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> Groups()
+        //{
+        //    var groups = await _context.TestGroups.ToListAsync();
+        //    return View(groups);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> CreateTopic()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateTopic(TestTopic model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.TestTopics.Add(model);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Topics));
+        //    }
+        //    return View(model);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> CreateGroup()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> AutoGroupTests()
+        //{
+        //    var tests = await _context.Tests.Include(t => t.Questions).ToListAsync();
+
+        //    foreach (var test in tests)
+        //    {
+        //        test.AutoGroup();
+        //    }
+
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> FilterTests(string topic = null, string group = null)
+        //{
+        //    var query = _context.Tests.AsQueryable();
+
+        //    if (!string.IsNullOrEmpty(topic))
+        //    {
+        //        query = query.Where(t => t.Topic.Name == topic);
+        //    }
+
+        //    if (!string.IsNullOrEmpty(group))
+        //    {
+        //        query = query.Where(t => t.Group.Name == group);
+        //    }
+
+        //    var tests = await query.ToListAsync();
+        //    return View(tests);
+        //}
+
+        [HttpPost]
+        //public async Task<IActionResult> CreateGroup(TestGroup model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.TestGroups.Add(model);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Groups));
+        //    }
+        //    return View(model);
+        //}
+
+        [HttpGet]
+        public IActionResult ImportQuestions()
+        {
+            // Получаем список тестов для выбора
+            ViewBag.Tests = _context.Tests.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportQuestions(IFormFile excelFile, int testId)
+        {
+            if (excelFile == null || excelFile.Length == 0)
+            {
+                ModelState.AddModelError("", "Файл не выбран");
+                ViewBag.Tests = _context.Tests.ToList();
+                return View();
+            }
+
+            var questions = new List<QuestionImportDto>();
+
+            // Регистрация провайдера кодировок для работы с Excel
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            using (var stream = new MemoryStream())
+            {
+                await excelFile.CopyToAsync(stream);
+
+                using (var package = new ExcelPackage(stream))
+                {
+                    var worksheet = package.Workbook.Worksheets[0];
+
+                    for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                    {
+                        try
+                        {
+                            var question = new QuestionImportDto
+                            {
+                                Text = worksheet.Cells[row, 1].Value?.ToString(),
+                                Type = ParseQuestionType(worksheet.Cells[row, 2].Value?.ToString()),
+                                Points = Convert.ToInt32(worksheet.Cells[row, 3].Value),
+                                Options = new List<QuestionOptionImportDto>()
+                            };
+
+                            // Парсинг вариантов ответов
+                            if (question.Type == QuestionType.SingleChoice ||
+                                question.Type == QuestionType.MultipleChoice)
+                            {
+                                for (int col = 4; col <= worksheet.Dimension.Columns; col += 2)
+                                {
+                                    var optionText = worksheet.Cells[row, col].Value?.ToString();
+                                    var isCorrect = worksheet.Cells[row, col + 1].Value?.ToString()?.ToLower() == "да";
+
+                                    if (!string.IsNullOrEmpty(optionText))
+                                    {
+                                        question.Options.Add(new QuestionOptionImportDto
+                                        {
+                                            Text = optionText,
+                                            IsCorrect = isCorrect
+                                        });
+                                    }
+                                }
+                            }
+
+                            questions.Add(question);
+                        }
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError("", $"Ошибка в строке {row}: {ex.Message}");
+                        }
+                    }
+                }
+            }
+
+            // Сохранение вопросов
+            int successCount = 0;
+            int errorCount = 0;
+
+            foreach (var questionDto in questions)
+            {
+                try
+                {
+                    var question = new Question
+                    {
+                        TestId = testId,
+                        Text = questionDto.Text,
+                        Type = questionDto.Type,
+                        Points = questionDto.Points,
+                        OrderIndex = _context.Questions.Count(q => q.TestId == testId) + 1
+                    };
+
+                    _context.Questions.Add(question);
+                    await _context.SaveChangesAsync();
+
+                    // Добавление вариантов ответов
+                    if (questionDto.Options != null)
+                    {
+                        foreach (var optionDto in questionDto.Options)
+                        {
+                            var option = new QuestionOption
+                            {
+                                QuestionId = question.Id,
+                                Text = optionDto.Text,
+                                IsCorrect = optionDto.IsCorrect
+                            };
+
+                            _context.QuestionOptions.Add(option);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Ошибка при импорте вопроса: {ex.Message}");
+                    errorCount++;
+                }
+            }
+
+            TempData["ImportResult"] = $"Импорт завершен. Успешно добавлено: {successCount}, Ошибок: {errorCount}";
+            return RedirectToAction("Questions", new { id = testId });
+        }
+
+        private QuestionType ParseQuestionType(string type)
+        {
+            return type?.ToLower() switch
+            {
+                "один из многих" => QuestionType.SingleChoice,
+                "многие из многих" => QuestionType.MultipleChoice,
+                "короткий ответ" => QuestionType.ShortAnswer,
+                "развернутый ответ" => QuestionType.Essay,
+                _ => QuestionType.SingleChoice // По умолчанию
+            };
+        }
+
+        [HttpGet]
+        public IActionResult CreateManualQuestion(int testId)
+        {
+            var model = new QuestionViewModel
+            {
+                TestId = testId,
+                Options = new List<QuestionOptionViewModel>
+        {
+            new QuestionOptionViewModel()
+        }
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateManualQuestion(QuestionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var question = new Question
+                {
+                    TestId = model.TestId,
+                    Text = model.Text,
+                    Type = model.Type,
+                    Points = model.Points,
+                    OrderIndex = _context.Questions.Count(q => q.TestId == model.TestId) + 1
+                };
+
+                _context.Questions.Add(question);
+                await _context.SaveChangesAsync();
+
+                // Добавление вариантов ответов
+                if (model.Type == QuestionType.SingleChoice ||
+                    model.Type == QuestionType.MultipleChoice)
+                {
+                    foreach (var optionModel in model.Options)
+                    {
+                        var option = new QuestionOption
+                        {
+                            QuestionId = question.Id,
+                            Text = optionModel.Text,
+                            IsCorrect = optionModel.IsCorrect
+                        };
+
+                        _context.QuestionOptions.Add(option);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction("Questions", new { id = model.TestId });
+            }
+
+            return View(model);
         }
     }
 }

@@ -1,0 +1,115 @@
+﻿@using OnlineTutor.Models.ViewModels
+@model QuestionViewModel
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Создание вопроса вручную</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateManualQuestion" method="post">
+                        <input type="hidden" asp-for="TestId" />
+
+                        <div class="mb-3">
+                            <label asp-for="Text" class="form-label">Текст вопроса</label>
+                            <textarea asp-for="Text" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Text" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Type" class="form-label">Тип вопроса</label>
+                            <select asp-for="Type" class="form-select" id="questionType">
+                                <option value="@QuestionType.SingleChoice">Один из многих</option>
+                                <option value="@QuestionType.MultipleChoice">Многие из многих</option>
+                                <option value="@QuestionType.ShortAnswer">Короткий ответ</option>
+                                <option value="@QuestionType.Essay">Развернутый ответ</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Points" class="form-label">Баллы</label>
+                            <input asp-for="Points" class="form-control" type="number" min="1" max="10" />
+                            <span asp-validation-for="Points" class="text-danger"></span>
+                        </div>
+
+                        <div id="optionsContainer" class="mb-3">
+                            <label class="form-label">Варианты ответов</label>
+                            <div id="optionsList">
+                                @for (int i = 0; i < Model.Options.Count; i++)
+                                {
+                                    <div class="option-row mb-2">
+                                        <div class="input-group">
+                                            <input type="text" name="Options[@i].Text" class="form-control" placeholder="Текст варианта" />
+                                            <div class="input-group-text">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="Options[@i].IsCorrect" class="form-check-input" />
+                                                    <label class="form-check-label">Правильный</label>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-danger remove-option">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button type="button" id="addOption" class="btn btn-secondary mt-2">
+                                <i class="fas fa-plus"></i> Добавить вариант
+                            </button>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Questions" asp-route-id="@Model.TestId" class="btn btn-secondary">Отмена</a>
+                            <button type="submit" class="btn btn-primary">Создать вопрос</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Показ/скрытие вариантов ответов в зависимости от типа вопроса
+            $('#questionType').change(function() {
+                var selectedType = $(this).val();
+                if (selectedType === '0' || selectedType === '1') {
+                    $('#optionsContainer').show();
+                } else {
+                    $('#optionsContainer').hide();
+                }
+            });
+
+            // Добавление варианта ответа
+            $('#addOption').click(function() {
+                var index = $('#optionsList .option-row').length;
+                var newRow = `
+                    <div class="option-row mb-2">
+                        <div class="input-group">
+                            <input type="text" name="Options[${index}].Text" class="form-control" placeholder="Текст варианта" />
+                            <div class="input-group-text">
+                                <div class="form-check">
+                                    <input type="checkbox" name="Options[${index}].IsCorrect" class="form-check-input" />
+                                    <label class="form-check-label">Правильный</label>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-danger remove-option">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                $('#optionsList').append(newRow);
+            });
+
+            // Удаление варианта ответа
+            $(document).on('click', '.remove-option', function() {
+                $(this).closest('.option-row').remove();
+            });
+        });
+    </script>
+}

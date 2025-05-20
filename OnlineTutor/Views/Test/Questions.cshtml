@@ -8,13 +8,15 @@
 
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Вопросы теста</h2>
         <div>
-            <h2>Вопросы теста</h2>
-            <h5 class="text-muted">@testTitle</h5>
+            <a asp-action="CreateManualQuestion" asp-route-testId="@ViewBag.TestId" class="btn btn-primary me-2">
+                <i class="fas fa-plus"></i> Создать вопрос вручную
+            </a>
+            <a asp-action="ImportQuestions" asp-route-testId="@ViewBag.TestId" class="btn btn-success">
+                <i class="fas fa-file-upload"></i> Импорт вопросов
+            </a>
         </div>
-        <a asp-action="AddQuestion" asp-route-testId="@testId" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Добавить вопрос
-        </a>
     </div>
 
     <div class="mb-3">

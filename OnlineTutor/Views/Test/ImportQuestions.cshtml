@@ -1,0 +1,79 @@
+﻿@model List<QuestionImportDto>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Импорт вопросов</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="ImportQuestions" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Выберите тест</label>
+                            <select name="testId" class="form-select" required>
+                                @foreach (var test in ViewBag.Tests)
+                                {
+                                    <option value="@test.Id">@test.Title</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Файл Excel</label>
+                            <input type="file" name="excelFile" class="form-control"
+                                   accept=".xlsx,.xls" required />
+                        </div>
+
+                        <div class="alert alert-info">
+                            <h5>Формат файла:</h5>
+                            <ul>
+                                <li>Первая строка - заголовки</li>
+                                <li>Столбцы: Текст вопроса, Тип вопроса, Баллы, Варианты ответов</li>
+                                <li>Для вопросов с выбором: после текста варианта - столбец "Да/Нет" для правильного ответа</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-file-upload"></i> Загрузить вопросы
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Пример шаблона файла</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Текст вопроса</th>
+                                <th>Тип вопроса</th>
+                                <th>Баллы</th>
+                                <th>Вариант 1</th>
+                                <th>Правильный</th>
+                                <th>Вариант 2</th>
+                                <th>Правильный</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Столица России</td>
+                                <td>Один из многих</td>
+                                <td>1</td>
+                                <td>Москва</td>
+                                <td>Да</td>
+                                <td>Санкт-Петербург</td>
+                                <td>Нет</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

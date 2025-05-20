@@ -27,6 +27,7 @@ namespace OnlineTutor.Data
         public DbSet<TestAssignment> TestAssignments { get; set; }
         public DbSet<TestAttempt> TestAttempts { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
+        public object TestGroups { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

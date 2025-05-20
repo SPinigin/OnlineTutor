@@ -1,0 +1,33 @@
+﻿@model List<TestTopic>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Темы тестов</h2>
+        <a asp-action="CreateTopic" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Создать тему
+        </a>
+    </div>
+
+    <div class="row">
+        @foreach (var topic in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@topic.Name</h5>
+                        <p class="card-text">Предмет: @topic.Subject</p>
+                        <p class="card-text">Количество тестов: @topic.Tests.Count</p>
+                        <div class="mt-3">
+                            <a asp-action="EditTopic" asp-route-id="@topic.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> Редактировать
+                            </a>
+                            <a asp-action="DeleteTopic" asp-route-id="@topic.Id" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i> Удалить
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

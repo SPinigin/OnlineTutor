@@ -1,0 +1,55 @@
+﻿@model List<Test>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <select id="topicFilter" class="form-select">
+                <option value="">Все темы</option>
+                @foreach (var topic in ViewBag.Topics)
+                {
+                    <option value="@topic.Name">@topic.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select id="groupFilter" class="form-select">
+                <option value="">Все группы</option>
+                @foreach (var group in ViewBag.Groups)
+                {
+                    <option value="@group.Name">@group.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button id="applyFilter" class="btn btn-primary">Применить фильтр</button>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var test in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@test.Title</h5>
+                        <p class="card-text">Тема: @test.Topic2.Name</p>
+                        <p class="card-text">Группа: @test.Group?.Name</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#applyFilter').click(function() {
+                var topic = $('#topicFilter').val();
+                var group = $('#groupFilter').val();
+
+                window.location.href = `/Test/FilterTests?topic=${topic}&group=${group}`;
+            });
+        });
+    </script>
+}

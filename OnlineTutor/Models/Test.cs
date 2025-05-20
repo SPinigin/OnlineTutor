@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
+using OnlineTutor.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace OnlineTutor.Models
 {
@@ -45,5 +50,44 @@ namespace OnlineTutor.Models
         public virtual User Teacher { get; set; }
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
         public virtual ICollection<TestAssignment> TestAssignments { get; set; } = new List<TestAssignment>();
+
+        public int? TopicId { get; set; }
+        public virtual TestTopic? Topic2 { get; set; }
+
+        public int? GroupId { get; set; }
+        public virtual TestGroup? Group { get; set; }
+
+        //public void AutoGroup()
+        //{
+        //    // Логика группировки
+        //    if (Questions.Average(q => q.Points) <= 2)
+        //    {
+        //        GroupId = GetGroupIdByNameAndType("Низкая сложность", TestGroupType.Difficulty);
+        //    }
+        //    else if (Questions.Average(q => q.Points) <= 4)
+        //    {
+        //        GroupId = GetGroupIdByNameAndType("Средняя сложность", TestGroupType.Difficulty);
+        //    }
+        //    else
+        //    {
+        //        GroupId = GetGroupIdByNameAndType("Высокая сложность", TestGroupType.Difficulty);
+        //    }
+
+        //    // Группировка по типу ответов
+        //    var answerTypes = Questions.Select(q => q.Type).Distinct().ToList();
+        //    if (answerTypes.Count == 1)
+        //    {
+        //        GroupId = GetGroupIdByNameAndType(
+        //            answerTypes[0].ToString(),
+        //            TestGroupType.AnswerType
+        //        );
+        //    }
+        //}
+
+        //public interface ITestGroupService
+        //{
+        //    int? GetGroupIdByNameAndType(string name, TestGroupType type);
+        //}
+
     }
 }
