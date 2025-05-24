@@ -224,11 +224,15 @@ namespace OnlineTutor.Controllers
                     return Forbid();
                 }
 
-                // Определяем порядковый номер вопроса
-                var maxOrder = await _context.Questions
-                    .Where(q => q.TestId == model.TestId)
-                    .Select(q => (int?)q.OrderIndex)
-                    .MaxAsync() ?? 0;
+                // Сдвигаем все вопросы с порядком >= model.OrderIndex вниз
+                var toShift = await _context.Questions
+                    .Where(q => q.TestId == model.TestId && q.OrderIndex >= model.OrderIndex)
+                    .ToListAsync();
+                foreach (var q in toShift)
+                {
+                    q.OrderIndex++;
+                    _context.Questions.Update(q);
+                }
 
                 var question = new Question
                 {
@@ -236,7 +240,7 @@ namespace OnlineTutor.Controllers
                     Text = model.Text,
                     Type = model.Type,
                     Points = model.Points,
-                    OrderIndex = maxOrder + 1
+                    OrderIndex = model.OrderIndex
                 };
 
                 _context.Questions.Add(question);
@@ -343,14 +347,11 @@ namespace OnlineTutor.Controllers
                     // Обновляем существующие опции и добавляем новые
                     var existingOptions = question.Options.ToList();
 
-                    // Удаляем опции, которых нет в модели
+                    var optionIds = model.Options?.Select(o => o.Id).ToHashSet() ?? new HashSet<int>();
                     foreach (var existingOption in existingOptions)
                     {
-                        var modelOption = model.Options.FirstOrDefault(o => o.Id == existingOption.Id);
-                        if (modelOption == null)
-                        {
+                        if (!optionIds.Contains(existingOption.Id))
                             _context.QuestionOptions.Remove(existingOption);
-                        }
                     }
 
                     // Обновляем существующие и добавляем новые опции
@@ -537,7 +538,9 @@ namespace OnlineTutor.Controllers
         }
 
         // GET: /Test/DeleteQuestion/5
-        public async Task<IActionResult> DeleteQuestion(int id)
+        [HttpPost, ActionName("DeleteQuestion")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteQuestionConfirmed(int id)
         {
             var question = await _context.Questions
                 .Include(q => q.Test)
@@ -557,9 +560,6 @@ namespace OnlineTutor.Controllers
 
             var testId = question.TestId;
             _context.Questions.Remove(question);
-            await _context.SaveChangesAsync();
-
-            // Перенумеровываем оставшиеся вопросы
             var remainingQuestions = await _context.Questions
                 .Where(q => q.TestId == testId)
                 .OrderBy(q => q.OrderIndex)
@@ -568,11 +568,10 @@ namespace OnlineTutor.Controllers
             for (int i = 0; i < remainingQuestions.Count; i++)
             {
                 remainingQuestions[i].OrderIndex = i + 1;
-                _context.Update(remainingQuestions[i]);
+                _context.Questions.Update(remainingQuestions[i]);
             }
 
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Questions), new { id = testId });
         }
 
@@ -595,30 +594,21 @@ namespace OnlineTutor.Controllers
             return PartialView("_OptionRow", new QuestionOptionViewModel());
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Topics()
-        //{
-        //    var topics = await _context.TestTopics
-        //        .Include(t => t.Tests)
-        //        .ToListAsync();
-        //    return View(topics);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Topics()
+        {
+            var topics = await _context.TestTopics
+                .Include(t => t.Tests)
+                .ToListAsync();
+            return View(topics);
+        }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Topics()
-        //{
-        //    var topics = await _context.TestTopics
-        //        .Include(t => t.Tests)
-        //        .ToListAsync();
-        //    return View(topics);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> Groups()
-        //{
-        //    var groups = await _context.TestGroups.ToListAsync();
-        //    return View(groups);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Groups()
+        {
+            var groups = await _context.TestGroups.ToListAsync();
+            return View(groups);
+        }
 
         [HttpGet]
         public async Task<IActionResult> CreateTopic()
@@ -626,112 +616,29 @@ namespace OnlineTutor.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateTopic(TestTopic model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.TestTopics.Add(model);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Topics));
-        //    }
-        //    return View(model);
-        //}
-
-        [HttpGet]
-        public async Task<IActionResult> CreateGroup()
+        [HttpPost]
+        public async Task<IActionResult> CreateTopic(TestTopic model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                _context.TestTopics.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Topics));
+            }
+            return View(model);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateGroup(TestGroup model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.TestGroups.Add(model);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Groups));
-        //    }
-        //    return View(model);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> Groups()
-        //{
-        //    var groups = await _context.TestGroups.ToListAsync();
-        //    return View(groups);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> CreateTopic()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateTopic(TestTopic model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.TestTopics.Add(model);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Topics));
-        //    }
-        //    return View(model);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> CreateGroup()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> AutoGroupTests()
-        //{
-        //    var tests = await _context.Tests.Include(t => t.Questions).ToListAsync();
-
-        //    foreach (var test in tests)
-        //    {
-        //        test.AutoGroup();
-        //    }
-
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> FilterTests(string topic = null, string group = null)
-        //{
-        //    var query = _context.Tests.AsQueryable();
-
-        //    if (!string.IsNullOrEmpty(topic))
-        //    {
-        //        query = query.Where(t => t.Topic.Name == topic);
-        //    }
-
-        //    if (!string.IsNullOrEmpty(group))
-        //    {
-        //        query = query.Where(t => t.Group.Name == group);
-        //    }
-
-        //    var tests = await query.ToListAsync();
-        //    return View(tests);
-        //}
-
         [HttpPost]
-        //public async Task<IActionResult> CreateGroup(TestGroup model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.TestGroups.Add(model);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Groups));
-        //    }
-        //    return View(model);
-        //}
+        public async Task<IActionResult> CreateGroup(TestGroup model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.TestGroups.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Groups));
+            }
+            return View(model);
+        }
 
         [HttpGet]
         public IActionResult ImportQuestions()

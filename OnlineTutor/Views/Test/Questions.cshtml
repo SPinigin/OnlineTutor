@@ -96,8 +96,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                         <form id="deleteQuestionForm" asp-action="DeleteQuestion" method="post">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" id="questionId" name="id" />
-                            <input type="hidden" name="testId" value="@testId" />
                             <button type="submit" class="btn btn-danger">Удалить</button>
                         </form>
                     </div>
@@ -109,17 +109,14 @@
 
 @section Scripts {
     <script>
-        // Скрипт для модального окна подтверждения удаления
-        var deleteQuestionModal = document.getElementById('deleteQuestionModal');
-        if (deleteQuestionModal) {
-            deleteQuestionModal.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var questionId = button.getAttribute('data-question-id');
-                var questionText = button.getAttribute('data-question-text');
-
-                document.getElementById('questionText').textContent = questionText;
-                document.getElementById('questionId').value = questionId;
-            });
-        }
+        var deleteModal = document.getElementById('deleteQuestionModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var qId = button.getAttribute('data-question-id');
+            var qText = button.getAttribute('data-question-text');
+            document.getElementById('questionText').textContent = qText;
+            document.getElementById('questionId').value = qId;
+        });
+    </script>
     </script>
 }
