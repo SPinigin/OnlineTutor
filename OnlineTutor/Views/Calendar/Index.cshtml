@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Календарь";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+<div class="container">
+    <h2 class="mt-4">Календарь</h2>
+    <div id="calendar"></div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                navLinks: true,
+                selectable: true,
+                selectMirror: true,
+                select: function (info) {
+                    var title = prompt('Название события:');
+                    if (title) {
+                        var evt = {
+                            title: title,
+                            start: info.startStr,
+                            end: info.endStr,
+                            allDay: info.allDay,
+                            backgroundColor: '#3788d8',
+                            borderColor: '#3788d8'
+                        };
+                        // AJAX на создание
+                        fetch('@Url.Action("CreateEvent", "Calendar")', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(evt)
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            evt.id = data.id;
+                            calendar.addEvent(evt);
+                        })
+                        .catch(() => alert('Ошибка при сохранении события.'));
+                    }
+                    calendar.unselect();
+                },
+                events: {
+                    url: '@Url.Action("GetEvents", "Calendar")',
+                    method: 'GET'
+                }
+            });
+            calendar.render();
+        });
+    </script>
+}

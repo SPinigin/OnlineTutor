@@ -51,6 +51,11 @@
                                             <i class="fas fa-user-plus me-2"></i>Ученики
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Calendar" asp-action="Index">
+                                            <i class="fas fa-calendar-alt me-2"></i>Календарь
+                                        </a>
+                                    </li>
                                 }
                                 @if (User.IsInRole("Teacher"))
                                 {
@@ -58,6 +63,11 @@
                                         <a class="nav-link" asp-controller="Teacher" asp-action="Index">
                                             <i class="fas fa-chalkboard-teacher me-2"></i>Кабинет
                                         </a>
+                                    </li>
+                                    <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Calendar" asp-action="Index">
+                                        <i class="fas fa-calendar-alt me-2"></i>Календарь
+                                    </a>
                                     </li>
                                 }
                                 @if (User.IsInRole("Student"))
@@ -74,6 +84,11 @@
                                             <i class="fas fa-sign-out-alt me-2"></i>Выйти
                                         </button>
                                     </form>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Calendar" asp-action="Index">
+                                        <i class="fas fa-calendar-alt me-2"></i>Календарь
+                                    </a>
                                 </li>
                             </ul>
                         }

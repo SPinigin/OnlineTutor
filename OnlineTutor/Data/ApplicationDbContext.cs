@@ -30,6 +30,9 @@ namespace OnlineTutor.Data
         public DbSet<TestTopic> TestTopics { get; set; }
         public DbSet<TestGroup> TestGroups { get; set; }
 
+        // События календаря
+        public DbSet<CalendarEvent> CalendarEvents { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
