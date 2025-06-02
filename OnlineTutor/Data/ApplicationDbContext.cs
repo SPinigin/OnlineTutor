@@ -156,6 +156,34 @@ namespace OnlineTutor.Data
                 .WithMany()
                 .HasForeignKey(sa => sa.QuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Материалы
+            modelBuilder.Entity<MaterialTopic>()
+                            .HasMany(t => t.Materials)
+                            .WithOne(m => m.Topic)
+                            .HasForeignKey(m => m.TopicId)
+                            .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Material>()
+                            .HasOne(m => m.Class)
+                            .WithMany(c => c.Materials)
+                            .HasForeignKey(m => m.ClassId)
+                            .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Material>()
+                            .HasOne(m => m.Student)
+                            .WithMany()
+                            .HasForeignKey(m => m.StudentId)
+                            .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Material>()
+                            .HasOne(m => m.Teacher)
+                            .WithMany()
+                            .HasForeignKey(m => m.TeacherId)
+                            .OnDelete(DeleteBehavior.Restrict);
         }
+
+        public DbSet<MaterialTopic> MaterialTopics { get; set; }
+        public DbSet<Material> Materials { get; set; }
     }
 }
