@@ -1,0 +1,86 @@
+﻿@model OnlineTutor.Models.ViewModels.MaterialViewModel
+@{
+    ViewData["Title"] = "Добавить материал";
+}
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="TopicId" class="form-label"></label>
+        <select asp-for="TopicId" class="form-select">
+            <option value="">-- Выберите тему --</option>
+            @foreach (var t in Model.Topics)
+            {
+                <option value="@t.Id">@t.Name</option>
+            }
+        </select>
+        <span asp-validation-for="TopicId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <select asp-for="Type" class="form-select">
+            <option value="Document">Документ</option>
+            <option value="Video">Видео</option>
+            <option value="Link">Ссылка</option>
+            <option value="Image">Изображение</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="File" class="form-label"></label>
+        <input asp-for="File" class="form-control" type="file" />
+        <span asp-validation-for="File" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FileUrl" class="form-label"></label>
+        <input asp-for="FileUrl" class="form-control" />
+        <span asp-validation-for="FileUrl" class="text-danger"></span>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="ClassId" class="form-label"></label>
+            <select asp-for="ClassId" class="form-select">
+                <option value="">-- Весь класс --</option>
+                @foreach (var c in Model.Classes)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="StudentId" class="form-label"></label>
+            <select asp-for="StudentId" class="form-select">
+                <option value="">-- Все ученики --</option>
+                @foreach (var s in Model.Students)
+                {
+                    <option value="@s.Id">@s.FullName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <button class="btn btn-success">Загрузить материал</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
