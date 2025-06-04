@@ -35,7 +35,6 @@
                             backgroundColor: '#3788d8',
                             borderColor: '#3788d8'
                         };
-                        // AJAX на создание
                         fetch('@Url.Action("CreateEvent", "Calendar")', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -50,6 +49,10 @@
                     }
                     calendar.unselect();
                 },
+                Тестовый заглушечный массив;
+                events: [
+                   { title: 'Тестовое', start: new Date().toISOString().slice(0,10), allDay: true }
+                ],
                 events: {
                     url: '@Url.Action("GetEvents", "Calendar")',
                     method: 'GET'
