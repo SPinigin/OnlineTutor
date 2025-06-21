@@ -1,0 +1,95 @@
+﻿@model List<OnlineTutor.Models.SpellingTest>
+
+@{
+    ViewData["Title"] = "Тесты правописания";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Тесты правописания</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Тесты</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Правописание</li>
+                </ol>
+            </nav>
+        </div>
+        <a asp-action="CreateSpelling" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Создать новый тест
+        </a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle"></i> Пока нет тестов</h5>
+            <p>У вас пока нет созданных тестов правописания. Нажмите кнопку "Создать новый тест", чтобы начать.</p>
+            <a asp-action="CreateSpelling" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Создать первый тест
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Название</th>
+                        <th>Дата создания</th>
+                        <th>Количество слов</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var test in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@test.Title</strong>
+                                @if (!string.IsNullOrEmpty(test.Description))
+                                {
+                                    <br>
+                        
+                                    <small class="text-muted">@test.Description</small>
+                                }
+                            </td>
+                            <td>@test.CreatedDate.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                <span class="badge bg-info">@test.Words.Count слов</span>
+                            </td>
+                            <td>
+                                @if (test.IsPublished)
+                                {
+                                    <span class="badge bg-success">Опубликован</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Черновик</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-action="EditSpelling" asp-route-id="@test.Id" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i> Редактировать
+                                    </a>
+                                    <a asp-action="SpellingWords" asp-route-id="@test.Id" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-list"></i> Слова
+                                    </a>
+                                    <a asp-action="AssignSpelling" asp-route-id="@test.Id" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-user-plus"></i> Назначить
+                                    </a>
+                                    <a asp-action="SpellingResults" asp-route-id="@test.Id" class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-chart-bar"></i> Результаты
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

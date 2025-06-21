@@ -181,6 +181,49 @@ namespace OnlineTutor.Data
                             .WithMany()
                             .HasForeignKey(m => m.TeacherId)
                             .OnDelete(DeleteBehavior.Restrict);
+
+            // Конфигурация для SpellingTest
+            modelBuilder.Entity<SpellingTest>()
+                .HasOne(st => st.Teacher)
+                .WithMany()
+                .HasForeignKey(st => st.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SpellingWord>()
+                .HasOne(sw => sw.Test)
+                .WithMany(st => st.Words)
+                .HasForeignKey(sw => sw.TestId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SpellingTestAssignment>()
+                .HasOne(sta => sta.Test)
+                .WithMany(st => st.Assignments)
+                .HasForeignKey(sta => sta.TestId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SpellingTestAssignment>()
+                .HasOne(sta => sta.Class)
+                .WithMany()
+                .HasForeignKey(sta => sta.ClassId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<SpellingTestAssignment>()
+                .HasOne(sta => sta.Student)
+                .WithMany()
+                .HasForeignKey(sta => sta.StudentId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<SpellingTestAttempt>()
+                .HasOne(sta => sta.Assignment)
+                .WithMany(a => a.Attempts)
+                .HasForeignKey(sta => sta.AssignmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SpellingTestAttempt>()
+                .HasOne(sta => sta.Student)
+                .WithMany()
+                .HasForeignKey(sta => sta.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<MaterialTopic> MaterialTopics { get; set; }
